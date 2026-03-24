@@ -4,79 +4,20 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>نظام الإشعارات المباشر</title>
-    <link rel="manifest" href="manifest.json">
 </head>
-<body style="text-align:center; font-family:sans-serif; padding-top:50px; background:#121212; color:white; margin:0;">
+<body style="text-align:center; font-family:sans-serif; padding-top:50px; background:#121212; color:white;">
     <h2>📢 نظام الإشعارات المباشر</h2>
-    <p style="color:#aaa;">اضغط الزر لتفعيل استلام الإشعارات</p>
-    <button id="activateBtn" style="padding:15px 40px; background:#28a745; color:white; border:none; border-radius:50px; font-size:18px; margin-top:20px; cursor:pointer;">🔔 تفعيل الإشعارات</button>
-    <p id="status" style="margin-top:30px; color:#ffaa00; font-size:14px;"></p>
-    
+    <p style="color:#aaa;">سيتم طلب الإشعارات تلقائياً</p>
+
+    <!-- كود OneSignal -->
+    <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
     <script>
-        // مفتاحك العام
-        const publicVapidKey = 'BDGc95hw44roF4WeRZ9zEM82Xjk1_fqv9f-8UMSxhfqFzo2eZs2g4SFW_91DQr9Be938S9eiy7vRZekdOxog1BM';
-        
-        function urlBase64ToUint8Array(base64String) {
-            const padding = '='.repeat((4 - base64String.length % 4) % 4);
-            const base64 = (base64String + padding).replace(/-/g, '+').replace(/_/g, '/');
-            const rawData = window.atob(base64);
-            const outputArray = new Uint8Array(rawData.length);
-            for (let i = 0; i < rawData.length; ++i) {
-                outputArray[i] = rawData.charCodeAt(i);
-            }
-            return outputArray;
-        }
-        
-        const statusDiv = document.getElementById('status');
-        
-        async function subscribeUser() {
-            try {
-                // تسجيل Service Worker
-                const registration = await navigator.serviceWorker.register('sw.js');
-                statusDiv.innerHTML = '✅ جاري التفعيل...';
-                
-                await navigator.serviceWorker.ready;
-                
-                // طلب الإذن
-                const permission = await Notification.requestPermission();
-                if (permission !== 'granted') {
-                    statusDiv.innerHTML = '❌ تحتاج الموافقة على الإشعارات';
-                    return;
-                }
-                
-                // الاشتراك في Push
-                const subscription = await registration.pushManager.subscribe({
-                    userVisibleOnly: true,
-                    applicationServerKey: urlBase64ToUint8Array(publicVapidKey)
-                });
-                
-                // تحويل الاشتراك لنص
-                const subscriptionString = JSON.stringify(subscription);
-                
-                // نسخ للحافظة
-                await navigator.clipboard.writeText(subscriptionString);
-                statusDiv.innerHTML = '✅ تم التفعيل بنجاح!\n\n📋 تم نسخ كود الجهاز.\nأرسل الكود للمشرف لإرسال الإشعارات.';
-                
-                // عرض الكود في تنبيه
-                alert('تم نسخ كود الجهاز!\nأرسله للمشرف.');
-                
-                console.log('Subscription:', subscriptionString);
-                
-            } catch (error) {
-                console.error('Error:', error);
-                statusDiv.innerHTML = '❌ خطأ: ' + error.message + '\nتأكد من استخدام HTTPS';
-            }
-        }
-        
-        document.getElementById('activateBtn').onclick = subscribeUser;
-        
-        // فحص دعم المتصفح
-        if ('serviceWorker' in navigator && 'PushManager' in window) {
-            statusDiv.innerHTML = '✅ المتصفح يدعم الإشعارات';
-        } else {
-            statusDiv.innerHTML = '❌ متصفحك لا يدعم الإشعارات';
-            document.getElementById('activateBtn').disabled = true;
-        }
+      window.OneSignalDeferred = window.OneSignalDeferred || [];
+      OneSignalDeferred.push(async function(OneSignal) {
+        await OneSignal.init({
+          appId: "e0f17c14-3a30-41e7-a55a-609b467c67ad",
+        });
+      });
     </script>
 </body>
 </html>
