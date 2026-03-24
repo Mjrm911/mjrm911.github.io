@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>نظام الإشعارات المباشر</title>
+</head>
+<body style="text-align:center; font-family:sans-serif; padding-top:50px; background:#121212; color:white;">
+    <h2>📢 نظام الإشعارات المباشر</h2>
+    <p id="status" style="color:#ffaa00;">جاري تهيئة الإشعارات...</p>
+
+    <script>
+        // هذا هو كود OneSignal الرسمي البسيط
+        window.OneSignalDeferred = window.OneSignalDeferred || [];
+        OneSignalDeferred.push(function(OneSignal) {
+            OneSignal.init({
+                appId: "e0f17c14-3a30-41e7-a55a-609b467c67ad",
+            });
+        });
+
+        // مراقبة حالة الاشتراك
+        function checkStatus() {
+            if (window.OneSignal) {
+                window.OneSignal.User.PushSubscription.getOptedIn().then(function(subscribed) {
+                    const statusEl = document.getElementById('status');
+                    if (subscribed) {
+                        statusEl.innerHTML = '✅ الإشعارات مفعلة! ستصل إليك التنبيهات.';
+                        statusEl.style.color = '#28a745';
+                    } else {
+                        statusEl.innerHTML = '⚠️ سيظهر طلب الإذن خلال ثوانٍ. اضغط سماح.';
+                    }
+                });
+            } else {
+                setTimeout(checkStatus, 1000);
+            }
+        }
+        setTimeout(checkStatus, 2000);
+    </script>
+    <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
+</body>
+</html>
