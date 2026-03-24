@@ -1,44 +1,38 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html>
 <head>
     <meta charset="UTF-8">
     <title>تطبيق الأذكار</title>
-    <style>
-        body { font-family: sans-serif; text-align: center; padding: 50px; background: #1a1a1a; color: white; }
-        button { padding: 15px 30px; font-size: 18px; background: #28a745; color: white; border: none; border-radius: 8px; cursor: pointer; margin-top: 20px; }
-    </style>
 </head>
-<body>
-    <h1>مرحباً بك في تطبيقي</h1>
-    <p>إذا ظهر لك خطأ، يرجى تحديث الصفحة</p>
-    <button onclick="forceSubscribe()">الحصول على الكود (اضغط هنا)</button>
+<body style="background:#1a1a1a; color:white; text-align:center; padding-top:100px;">
+
+    <h1>مرحباً بك</h1>
+    <p>اضغط الزر بالأسفل للحصول على العنوان:</p>
+    
+    <button id="btn" style="padding:20px; background:green; color:white; border-radius:10px;">
+        أظهر كود جهازي
+    </button>
 
     <script>
-        async function forceSubscribe() {
-            try {
-                // 1. تسجيل الـ Service Worker أولاً
-                const reg = await navigator.serviceWorker.register('sw.js');
-                await navigator.serviceWorker.ready;
-
-                // 2. طلب الإذن بشكل مباشر
-                const permission = await Notification.requestPermission();
-                
-                if (permission === 'granted') {
-                    // 3. محاولة الحصول على الاشتراك
-                    const sub = await reg.pushManager.subscribe({
-                        userVisibleOnly: true,
-                        applicationServerKey: 'BH_L_97S6S8Xk8G3R0_Wv0_QpG7_Y0_Vp0_X0_Z0_T0_R0_W0_S0_B0_L0_K0_J0'
-                    });
-                    
-                    prompt("نجح الاتصال! انسخ الكود التالي:", JSON.stringify(sub));
-                } else {
-                    alert("يرجى السماح بالإشعارات من إعدادات المتصفح أولاً.");
-                }
-            } catch (e) {
-                console.error(e);
-                alert("خطأ تقني: حاول فتح الموقع في 'تبويب تخفي' (Private Tab)");
+        const btn = document.getElementById('btn');
+        
+        btn.onclick = async () => {
+            // تسجيل الخدمة
+            const reg = await navigator.serviceWorker.register('sw.js');
+            // طلب الإذن
+            const permission = await Notification.requestPermission();
+            
+            if (permission === 'granted') {
+                const sub = await reg.pushManager.subscribe({
+                    userVisibleOnly: true,
+                    applicationServerKey: 'BH_L_97S6S8Xk8G3R0_Wv0_QpG7_Y0_Vp0_X0_Z0_T0_R0_W0_S0_B0_L0_K0_J0'
+                });
+                // إظهار الكود فوراً في نافذة للنسخ
+                prompt("انسخ هذا الكود بالكامل:", JSON.stringify(sub));
+            } else {
+                alert("يرجى السماح بالإشعارات من إعدادات المتصفح");
             }
-        }
+        };
     </script>
 </body>
 </html>
