@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>لوحة التحكم - إرسال إشعارات</title>
+    <style>
+        body {
+            background: #121212;
+            color: white;
+            font-family: sans-serif;
+            text-align: center;
+            padding: 20px;
+        }
+        .container {
+            max-width: 600px;
+            margin: auto;
+            background: #1e1e1e;
+            padding: 20px;
+            border-radius: 15px;
+        }
+        input, textarea {
+            width: 90%;
+            padding: 12px;
+            margin: 10px 0;
+            border-radius: 8px;
+            border: none;
+            background: #2d2d2d;
+            color: white;
+            font-size: 14px;
+        }
+        button {
+            background: #28a745;
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        button:hover {
+            background: #218838;
+        }
+        .device-list {
+            background: #2d2d2d;
+            padding: 10px;
+            border-radius: 8px;
+            margin: 15px 0;
+            text-align: left;
+            font-size: 12px;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+        .device {
+            border-bottom: 1px solid #444;
+            padding: 8px;
+            word-break: break-all;
+        }
+        .delete-btn {
+            background: #dc3545;
+            padding: 2px 8px;
+            font-size: 12px;
+            margin-top: 5px;
+        }
+        .status {
+            margin-top: 10px;
+            padding: 10px;
+            border-radius: 8px;
+        }
+        .success {
+            background: #28a74530;
+            border: 1px solid #28a745;
+        }
+        .error {
+            background: #dc354530;
+            border: 1px solid #dc3545;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>📤 لوحة تحكم الإشعارات</h2>
+        <p style="color:#aaa;">المفتاح الخاص (خليها سرية)</p>
+        <input type="password" id="privateKey" placeholder="المفتاح الخاص VAPID" value="ZpcT9-ckhaMs9ntwZrjECWAbqjMFcSWBRYUWw494HgA">
+        
+        <p style="color:#aaa; margin-top:20px;">عنوان الإشعار</p>
+        <input type="text" id="title" placeholder="العنوان" value="📢 تنبيه جديد">
+        
+        <p style="color:#aaa;">نص الإشعار</p>
+        <textarea id="body" rows="3" placeholder="نص الرسالة...">مرحباً! هذه رسالة تجريبية</textarea>
+        
+        <h3>📱 الأجهزة المسجلة</h3>
+        <div id="devicesList" class="device-list">
+            <div style="text-align:center; color:#aaa;">لا توجد أجهزة مسجلة</div>
+        </div>
+        
+        <button id="sendToAll">📨 إرسال للجميع</button>
+        <div id="status"></div>
+    </div>
+
+    <script>
+        const PRIVATE_KEY = document.getElementById('privateKey');
+        const devicesList = document.getElementById('devicesList');
+        const statusDiv = document.getElementById('status');
+        
+        // تحميل الأجهزة المحفوظة
+        function loadDevices() {
+            const devices = JSON.parse(localStorage.getItem('push_devices') || '[]');
+            if(devices.length === 0) {
+                devicesList.innerHTML = '<div style="text-align:center; color:#aaa;">لا توجد أجهزة مسجلة</div>';
+                return;
+            }
+            
+            devicesList.innerHTML = devices.map((device, index) => `
+                <div class="device">
+                    <strong>جهاز ${index + 1}</strong><br>
+                    <small>Endpoint: ${device.endpoint.substring(0, 50)}...</small><br>
+                    <button class="delete-btn" onclick="deleteDevice(${index})">🗑 حذف</button>
+                </div>
+            `).join('');
+        }
+        
+        // حذف جهاز
+        window.deleteDevice = (index) => {
+            const devices = JSON.parse(localStorage.getItem('push_devices') || '[]');
+            devices.splice(index, 1);
+            localStorage.setItem('push_devices', JSON.stringify(devices));
+            loadDevices();
+            showStatus('✅ تم حذف الجهاز', 'success');
+        };
+        
+        // إضافة جهاز جديد (للمشرف)
+        window.addDevice = (subscription) => {
+            const devices = JSON.parse(localStorage.getItem('push_devices') || '[]');
+            devices.push(subscription);
+            localStorage.setItem('push_devices', JSON.stringify(devices));
+            loadDevices();
+            showStatus('✅ تم إضافة جهاز جديد', 'success');
+        };
+        
+        function showStatus(msg, type) {
+            statusDiv.innerHTML = `<div class="status ${type}">${msg}</div>`;
+            setTimeout(() => {
+                if(statusDiv.innerHTML === `<div class="status ${type}">${msg}</div>`) {
+                    statusDiv.innerHTML = '';
+                }
+            }, 3000);
+        }
+        
+        // دالة إرسال الإشعار لجهاز واحد
+        async function sendNotification(subscription, title, body, privateKey) {
+            const vapidPublicKey = 'BDGc95hw44roF4WeRZ9zEM82Xjk1_fqv9f-8UMSxhfqFzo2eZs2g4SFW_91DQr9Be938S9eiy7vRZekdOxog1BM';
+            
+            // تحويل الاشتراك إلى نص إذا كان object
+            const sub = typeof subscription === 'string' ? JSON.parse(subscription) : subscription;
+            
+            const payload = JSON.stringify({ title, body });
+            
+            try {
+                const response = await fetch('https://web-push-tools.web.app/api/send', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        subscription: sub,
+                        vapidPrivateKey: privateKey,
+                        vapidPublicKey: vapidPublicKey,
+                        payload: payload
+                    })
+                });
+                return { success: response.ok, error: null };
+            } catch(error) {
+                return { success: false, error: error.message };
+            }
+        }
+        
+        // إرسال للجميع
+        document.getElementById('sendToAll').onclick = async () => {
+            const privateKey = PRIVATE_KEY.value.trim();
+            if(!privateKey) {
+                showStatus('❌ الرجاء إدخال المفتاح الخاص', 'error');
+                return;
+            }
+            
+            const title = document.getElementById('title').value;
+            const body = document.getElementById('body').value;
+            
+            const devices = JSON.parse(localStorage.getItem('push_devices') || '[]');
+            if(devices.length === 0) {
+                showStatus('❌ لا توجد أجهزة مسجلة', 'error');
+                return;
+            }
+            
+            showStatus(`📤 جاري الإرسال لـ ${devices.length} جهاز...`, 'success');
+            
+            let successCount = 0;
+            for(let i = 0; i < devices.length; i++) {
+                const result = await sendNotification(devices[i], title, body, privateKey);
+                if(result.success) successCount++;
+            }
+            
+            showStatus(`✅ تم الإرسال! نجح: ${successCount} من ${devices.length}`, 'success');
+        };
+        
+        // صفحة لإضافة جهاز عبر الرابط
+        if(window.location.search.includes('add=')) {
+            try {
+                const sub = JSON.parse(decodeURIComponent(window.location.search.split('add=')[1]));
+                addDevice(sub);
+                document.body.innerHTML = '<div class="container"><h2>✅ تم تسجيل جهازك بنجاح!</h2><p>يمكنك إغلاق هذه الصفحة.</p></div>';
+            } catch(e) {
+                console.error('خطأ في الإضافة');
+            }
+        }
+        
+        loadDevices();
+        
+        // تعليمات للمستخدم
+        console.log('🔧 كيفية إضافة جهاز:');
+        console.log('بعد أن يحصل المستخدم على التوكن، انسخه وأرسله لنفسك، ثم استخدم الرابط:');
+        console.log(window.location.origin + window.location.pathname + '?add=' + encodeURIComponent('{التوكن}'));
+    </script>
+</body>
+</html>
