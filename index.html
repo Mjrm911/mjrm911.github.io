@@ -1,9 +1,32 @@
-<script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
-<script>
-  window.OneSignalDeferred = window.OneSignalDeferred || [];
-  OneSignalDeferred.push(async function(OneSignal) {
-    await OneSignal.init({
-      appId: "e0f17c14-3a30-41e7-a55a-609b467c67ad",
-    });
-  });
-</script>
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>نظام الأذكار المطور</title>
+    
+    <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
+    <script>
+      window.OneSignalDeferred = window.OneSignalDeferred || [];
+      OneSignalDeferred.push(async function(OneSignal) {
+        await OneSignal.init({
+          appId: "e0f17c14-3a30-41e7-a55a-609b467c67ad",
+          notifyButton: {
+            enable: true, /* لإظهار الجرس تلقائياً */
+          },
+        });
+      });
+    </script>
+
+    <style>
+        body { background: #121212; color: white; text-align: center; padding-top: 100px; font-family: sans-serif; }
+        .box { border: 1px solid #333; padding: 20px; display: inline-block; border-radius: 15px; background: #1e1e1e; }
+    </style>
+</head>
+<body>
+    <div class="box">
+        <h2>✨ نظام الأذكار المباشر</h2>
+        <p>يرجى الضغط على الجرس في الزاوية لتفعيل التنبيهات</p>
+    </div>
+</body>
+</html>
