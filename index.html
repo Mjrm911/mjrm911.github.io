@@ -4,28 +4,39 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>نظام الإشعارات المباشر</title>
-    <link rel="manifest" href="/manifest.json">
 </head>
 <body style="text-align:center; font-family:sans-serif; padding-top:50px; background:#121212; color:white;">
     <h2>📢 نظام الإشعارات المباشر</h2>
-    <p id="status" style="color:#ffaa00;">جارٍ تحميل الإشعارات...</p>
+    <p id="status" style="color:#ffaa00;">جاري تجهيز الإشعارات...</p>
 
-    <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
+    <script src="https://cdn.onesignal.com/sdks/OneSignalSDK.js" async></script>
     <script>
-        window.OneSignalDeferred = window.OneSignalDeferred || [];
-        OneSignalDeferred.push(async function(OneSignal) {
-            await OneSignal.init({
+        window.OneSignal = window.OneSignal || [];
+        OneSignal.push(function() {
+            OneSignal.init({
                 appId: "e0f17c14-3a30-41e7-a55a-609b467c67ad",
+                autoRegister: true,
+                notifyButton: {
+                    enable: true,
+                },
+                welcomeNotification: {
+                    title: "Azkar",
+                    message: "شكراً لتفعيل الإشعارات!",
+                },
             });
-            // بعد التهيئة، نعرض حالة الاشتراك
-            const isSubscribed = await OneSignal.User.PushSubscription.getOptedIn();
-            const statusDiv = document.getElementById('status');
-            if (isSubscribed) {
-                statusDiv.innerHTML = '✅ الإشعارات مفعلة. ستصل إليك التنبيهات.';
-                statusDiv.style.color = '#28a745';
-            } else {
-                statusDiv.innerHTML = '⚠️ لم يتم تفعيل الإشعارات بعد. اضغط زر "السماح" إذا ظهر طلب.';
-            }
+        });
+
+        // مراقبة حالة الاشتراك
+        OneSignal.push(function() {
+            OneSignal.isPushNotificationsEnabled(function(isEnabled) {
+                const statusEl = document.getElementById('status');
+                if (isEnabled) {
+                    statusEl.innerHTML = '✅ الإشعارات مفعلة! ستصل إليك التنبيهات.';
+                    statusEl.style.color = '#28a745';
+                } else {
+                    statusEl.innerHTML = '⚠️ انتظر... سيظهر طلب الإذن قريباً.';
+                }
+            });
         });
     </script>
 </body>
