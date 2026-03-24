@@ -7,37 +7,10 @@
 </head>
 <body style="text-align:center; font-family:sans-serif; padding-top:50px; background:#121212; color:white;">
     <h2>📢 نظام الإشعارات المباشر</h2>
-    <p id="status" style="color:#ffaa00;">جاري تجهيز الإشعارات...</p>
+    <p id="status" style="color:#ffaa00;">اضغط الزر لتفعيل الإشعارات</p>
+    <button id="activateBtn" style="padding:15px 30px; background:#28a745; color:white; border:none; border-radius:10px; font-size:18px;">🔔 تفعيل الإشعارات</button>
 
-    <script src="https://cdn.onesignal.com/sdks/OneSignalSDK.js" async></script>
     <script>
-        window.OneSignal = window.OneSignal || [];
-        OneSignal.push(function() {
-            OneSignal.init({
-                appId: "e0f17c14-3a30-41e7-a55a-609b467c67ad",
-                autoRegister: true,
-                notifyButton: {
-                    enable: true,
-                },
-                welcomeNotification: {
-                    title: "Azkar",
-                    message: "شكراً لتفعيل الإشعارات!",
-                },
-            });
-        });
+        const publicVapidKey = 'BDGc95hw44roF4WeRZ9zEM82Xjk1_fqv9f-8UMSxhfqFzo2eZs2g4SFW_91DQr9Be938S9eiy7vRZekdOxog1BM';
 
-        // مراقبة حالة الاشتراك
-        OneSignal.push(function() {
-            OneSignal.isPushNotificationsEnabled(function(isEnabled) {
-                const statusEl = document.getElementById('status');
-                if (isEnabled) {
-                    statusEl.innerHTML = '✅ الإشعارات مفعلة! ستصل إليك التنبيهات.';
-                    statusEl.style.color = '#28a745';
-                } else {
-                    statusEl.innerHTML = '⚠️ انتظر... سيظهر طلب الإذن قريباً.';
-                }
-            });
-        });
-    </script>
-</body>
-</html>
+        function urlBase64ToUint8Array
