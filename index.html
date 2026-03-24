@@ -3,39 +3,58 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>نظام الإشعارات المباشر</title>
-</head>
-<body style="text-align:center; font-family:sans-serif; padding-top:50px; background:#121212; color:white;">
-    <h2>📢 نظام الإشعارات المباشر</h2>
-    <p id="status" style="color:#ffaa00;">جاري تهيئة الإشعارات...</p>
-
-    <script>
-        // هذا هو كود OneSignal الرسمي البسيط
-        window.OneSignalDeferred = window.OneSignalDeferred || [];
-        OneSignalDeferred.push(function(OneSignal) {
-            OneSignal.init({
-                appId: "e0f17c14-3a30-41e7-a55a-609b467c67ad",
-            });
-        });
-
-        // مراقبة حالة الاشتراك
-        function checkStatus() {
-            if (window.OneSignal) {
-                window.OneSignal.User.PushSubscription.getOptedIn().then(function(subscribed) {
-                    const statusEl = document.getElementById('status');
-                    if (subscribed) {
-                        statusEl.innerHTML = '✅ الإشعارات مفعلة! ستصل إليك التنبيهات.';
-                        statusEl.style.color = '#28a745';
-                    } else {
-                        statusEl.innerHTML = '⚠️ سيظهر طلب الإذن خلال ثوانٍ. اضغط سماح.';
-                    }
-                });
-            } else {
-                setTimeout(checkStatus, 1000);
-            }
-        }
-        setTimeout(checkStatus, 2000);
-    </script>
+    <title>نظام الأذكار المطور</title>
+    
     <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
+    <script>
+      window.OneSignal = window.OneSignal || [];
+      OneSignal.push(function() {
+        OneSignal.init({
+          appId: "e0f17c14-3a30-41e7-a55a-609b467c67ad", // معرف تطبيقك الخاص
+          notifyButton: {
+            enable: true, // إظهار زر الجرس التلقائي أسفل الشاشة
+            position: 'bottom-left',
+            size: 'medium',
+            theme: 'dark',
+          },
+          welcomeNotification: {
+            "title": "تم التفعيل بنجاح",
+            "message": "شكراً لاشتراكك في نظام الأذكار!",
+          }
+        });
+      });
+    </script>
+
+    <style>
+        body {
+            background: #121212;
+            color: white;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .card {
+            background: #1e1e1e;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+            text-align: center;
+            max-width: 400px;
+        }
+        h2 { color: #00e676; }
+        p { color: #aaa; line-height: 1.6; }
+    </style>
+</head>
+<body>
+
+    <div class="card">
+        <h2>📢 نظام الأذكار</h2>
+        <p>مرحباً بك! لتصلك أذكار يومية وتنبيهات مباشرة، يرجى الضغط على <b>أيقونة الجرس</b> أسفل الشاشة واختيار "سماح" أو "Allow".</p>
+    </div>
+
 </body>
 </html>
