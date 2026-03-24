@@ -2,45 +2,41 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>تطبيق الأذكار</title>
-    <link rel="manifest" href="manifest.json">
     <style>
         body { font-family: sans-serif; text-align: center; padding: 50px; background: #1a1a1a; color: white; }
-        button { padding: 15px 30px; font-size: 18px; background: #28a745; color: white; border: none; border-radius: 8px; cursor: pointer; transition: 0.3s; margin-top: 20px; }
-        button:hover { background: #218838; }
-        .token-box { word-break: break-all; background: #333; padding: 10px; margin-top: 20px; border-radius: 5px; display: none; }
+        button { padding: 15px 30px; font-size: 18px; background: #28a745; color: white; border: none; border-radius: 8px; cursor: pointer; margin-top: 20px; }
     </style>
 </head>
 <body>
     <h1>مرحباً بك في تطبيقي</h1>
-    <p>اضغط الزر بالأسفل لتفعيل الإشعارات:</p>
-    <button onclick="subscribe()">تفعيل الإشعارات</button>
-    <div id="tokenArea" class="token-box"></div>
+    <p>إذا ظهر لك خطأ، يرجى تحديث الصفحة</p>
+    <button onclick="forceSubscribe()">الحصول على الكود (اضغط هنا)</button>
 
     <script>
-        if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('sw.js');
-        }
-
-        async function subscribe() {
+        async function forceSubscribe() {
             try {
+                // 1. تسجيل الـ Service Worker أولاً
+                const reg = await navigator.serviceWorker.register('sw.js');
+                await navigator.serviceWorker.ready;
+
+                // 2. طلب الإذن بشكل مباشر
                 const permission = await Notification.requestPermission();
+                
                 if (permission === 'granted') {
-                    const sw = await navigator.serviceWorker.ready;
-                    const sub = await sw.pushManager.subscribe({
+                    // 3. محاولة الحصول على الاشتراك
+                    const sub = await reg.pushManager.subscribe({
                         userVisibleOnly: true,
                         applicationServerKey: 'BH_L_97S6S8Xk8G3R0_Wv0_QpG7_Y0_Vp0_X0_Z0_T0_R0_W0_S0_B0_L0_K0_J0'
                     });
                     
-                    const token = btoa(JSON.stringify(sub));
-                    console.log(token);
-                    prompt("تم التفعيل بنجاح! انسخ هذا الكود وأرسله للمرسل:", token);
+                    prompt("نجح الاتصال! انسخ الكود التالي:", JSON.stringify(sub));
                 } else {
-                    alert("يجب السماح بالإشعارات لكي يعمل التطبيق.");
+                    alert("يرجى السماح بالإشعارات من إعدادات المتصفح أولاً.");
                 }
-            } catch (error) {
-                alert("حدث خطأ، تأكد أنك تفتح الموقع برابط https.");
+            } catch (e) {
+                console.error(e);
+                alert("خطأ تقني: حاول فتح الموقع في 'تبويب تخفي' (Private Tab)");
             }
         }
     </script>
