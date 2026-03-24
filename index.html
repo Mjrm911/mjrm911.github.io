@@ -2,42 +2,81 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <title>تنشيط الإرسال المباشر</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>نظام الإشعارات المباشر</title>
+    <link rel="manifest" href="manifest.json">
 </head>
-<body style="background:#121212; color:white; text-align:center; padding-top:50px; font-family:sans-serif;">
-    <h2>نظام الإشعارات المباشر</h2>
-    <button id="activate" style="padding:15px 30px; background:#28a745; color:white; border:none; border-radius:8px; font-size:18px; cursor:pointer;">استخراج كود الجهاز</button>
-
+<body style="text-align:center; font-family:sans-serif; padding-top:50px; background:#121212; color:white; margin:0;">
+    <h2>📢 نظام الإشعارات المباشر</h2>
+    <p style="color:#aaa;">اضغط الزر لتفعيل استلام الإشعارات</p>
+    <button id="activateBtn" style="padding:15px 40px; background:#28a745; color:white; border:none; border-radius:50px; font-size:18px; margin-top:20px; cursor:pointer;">🔔 تفعيل الإشعارات</button>
+    <p id="status" style="margin-top:30px; color:#ffaa00; font-size:14px;"></p>
+    
     <script>
-        // دالة التحويل المعيارية العالمية
+        // مفتاحك العام
+        const publicVapidKey = 'BDGc95hw44roF4WeRZ9zEM82Xjk1_fqv9f-8UMSxhfqFzo2eZs2g4SFW_91DQr9Be938S9eiy7vRZekdOxog1BM';
+        
         function urlBase64ToUint8Array(base64String) {
             const padding = '='.repeat((4 - base64String.length % 4) % 4);
             const base64 = (base64String + padding).replace(/-/g, '+').replace(/_/g, '/');
             const rawData = window.atob(base64);
             const outputArray = new Uint8Array(rawData.length);
-            for (let i = 0; i < rawData.length; ++i) { outputArray[i] = rawData.charCodeAt(i); }
+            for (let i = 0; i < rawData.length; ++i) {
+                outputArray[i] = rawData.charCodeAt(i);
+            }
             return outputArray;
         }
-
-        // مفتاح جديد تماماً (نظيف)
-        const publicKey = 'BCf_Lh6v-W8O_7N-m7k8G3R0_Wv0_QpG7_Y0_Vp0_X0_Z0_T0_R0_W0_S0_B0_L0_K0_J0';
-
-        document.getElementById('activate').onclick = async () => {
+        
+        const statusDiv = document.getElementById('status');
+        
+        async function subscribeUser() {
             try {
-                // إجبار المتصفح على تحميل نسخة جديدة تماماً بـ v=100
-                const reg = await navigator.serviceWorker.register('sw.js?v=100');
+                // تسجيل Service Worker
+                const registration = await navigator.serviceWorker.register('sw.js');
+                statusDiv.innerHTML = '✅ جاري التفعيل...';
+                
                 await navigator.serviceWorker.ready;
-
-                const sub = await reg.pushManager.subscribe({
+                
+                // طلب الإذن
+                const permission = await Notification.requestPermission();
+                if (permission !== 'granted') {
+                    statusDiv.innerHTML = '❌ تحتاج الموافقة على الإشعارات';
+                    return;
+                }
+                
+                // الاشتراك في Push
+                const subscription = await registration.pushManager.subscribe({
                     userVisibleOnly: true,
-                    applicationServerKey: urlBase64ToUint8Array(publicKey)
+                    applicationServerKey: urlBase64ToUint8Array(publicVapidKey)
                 });
-
-                prompt("نجحنا! انسخ هذا الكود بالكامل وضعه في الدردشة:", JSON.stringify(sub));
-            } catch (err) {
-                alert("خطأ تقني: " + err.message + "\nجرب فتح الموقع في متصفح خفي (Incognito).");
+                
+                // تحويل الاشتراك لنص
+                const subscriptionString = JSON.stringify(subscription);
+                
+                // نسخ للحافظة
+                await navigator.clipboard.writeText(subscriptionString);
+                statusDiv.innerHTML = '✅ تم التفعيل بنجاح!\n\n📋 تم نسخ كود الجهاز.\nأرسل الكود للمشرف لإرسال الإشعارات.';
+                
+                // عرض الكود في تنبيه
+                alert('تم نسخ كود الجهاز!\nأرسله للمشرف.');
+                
+                console.log('Subscription:', subscriptionString);
+                
+            } catch (error) {
+                console.error('Error:', error);
+                statusDiv.innerHTML = '❌ خطأ: ' + error.message + '\nتأكد من استخدام HTTPS';
             }
-        };
+        }
+        
+        document.getElementById('activateBtn').onclick = subscribeUser;
+        
+        // فحص دعم المتصفح
+        if ('serviceWorker' in navigator && 'PushManager' in window) {
+            statusDiv.innerHTML = '✅ المتصفح يدعم الإشعارات';
+        } else {
+            statusDiv.innerHTML = '❌ متصفحك لا يدعم الإشعارات';
+            document.getElementById('activateBtn').disabled = true;
+        }
     </script>
 </body>
 </html>
