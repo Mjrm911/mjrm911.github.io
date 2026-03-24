@@ -7,61 +7,67 @@
 </head>
 <body style="text-align:center; font-family:sans-serif; padding-top:50px; background:#121212; color:white;">
     <h2>📢 نظام الإشعارات المباشر</h2>
-    <p id="status" style="color:#ffaa00;">⚠️ اضغط الزر لتفعيل الإشعارات</p>
+    <p id="status" style="color:#ffaa00;">اضغط الزر لتفعيل الإشعارات</p>
     <button id="requestBtn" style="padding:15px 30px; background:#28a745; color:white; border:none; border-radius:10px; font-size:18px; margin-top:20px;">🔔 فعّل الإشعارات</button>
 
-    <!-- كود OneSignal -->
     <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
     <script>
-        let OneSignal = null;
+        let oneSignalInitialized = false;
+        let oneSignalObject = null;
         
+        // تهيئة OneSignal
         window.OneSignalDeferred = window.OneSignalDeferred || [];
-        window.OneSignalDeferred.push(async function(os) {
-            OneSignal = os;
+        window.OneSignalDeferred.push(async function(OneSignal) {
+            oneSignalObject = OneSignal;
             await OneSignal.init({
                 appId: "e0f17c14-3a30-41e7-a55a-609b467c67ad",
-                allowLocalhostAsSecureOrigin: true,
             });
+            oneSignalInitialized = true;
             
-            // التحقق من الحالة
+            // التحقق إذا كان مفعل مسبقاً
             const isSubscribed = await OneSignal.User.PushSubscription.getOptedIn();
             const statusEl = document.getElementById('status');
             if (isSubscribed) {
                 statusEl.innerHTML = '✅ الإشعارات مفعلة!';
                 statusEl.style.color = '#28a745';
                 document.getElementById('requestBtn').style.display = 'none';
-            } else {
-                statusEl.innerHTML = '⚠️ اضغط الزر لتفعيل الإشعارات';
             }
         });
         
         // زر التفعيل
         document.getElementById('requestBtn').onclick = async () => {
             const statusEl = document.getElementById('status');
+            
+            if (!oneSignalInitialized) {
+                statusEl.innerHTML = '⏳ جاري تحميل الخدمة... انتظر ثانية';
+                // انتظر حتى يكتمل التحميل
+                await new Promise(resolve => {
+                    const checkInterval = setInterval(() => {
+                        if (oneSignalInitialized) {
+                            clearInterval(checkInterval);
+                            resolve();
+                        }
+                    }, 100);
+                });
+            }
+            
             statusEl.innerHTML = '⏳ جاري طلب الإذن...';
             
             try {
-                // انتظار تحميل OneSignal
-                if (!OneSignal) {
-                    statusEl.innerHTML = '⏳ جاري تحميل الخدمة... انتظر ثانية';
-                    await new Promise(resolve => setTimeout(resolve, 2000));
-                }
-                
-                // الطريقة الصحيحة لطلب الإذن في OneSignal v16
-                const result = await OneSignal.Notifications.requestPermission();
+                // طلب الإذن
+                const result = await oneSignalObject.Notifications.requestPermission();
                 
                 if (result === 'granted') {
                     statusEl.innerHTML = '✅ تم التفعيل! ستصل الإشعارات الآن.';
                     statusEl.style.color = '#28a745';
                     document.getElementById('requestBtn').style.display = 'none';
                 } else {
-                    statusEl.innerHTML = '❌ لم يتم الموافقة على الإشعارات. حاول مرة أخرى.';
+                    statusEl.innerHTML = '❌ تم رفض الإشعارات. اذهب لإعدادات الموقع واسمح بالإشعارات.';
                     statusEl.style.color = '#ff5555';
                 }
             } catch(e) {
-                console.error('Error:', e);
-                statusEl.innerHTML = '❌ خطأ: ' + e.message;
-                statusEl.style.color = '#ff5555';
+                statusEl.innerHTML = '❌ حدث خطأ. تأكد أن الإشعارات مسموحة في إعدادات المتصفح.';
+                console.error(e);
             }
         };
     </script>
