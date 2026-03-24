@@ -1,36 +1,51 @@
 <!DOCTYPE html>
-<html>
+<html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
     <title>تطبيق الأذكار</title>
 </head>
-<body style="background:#1a1a1a; color:white; text-align:center; padding-top:100px;">
+<body style="background:#1a1a1a; color:white; text-align:center; padding-top:100px; font-family:sans-serif;">
 
-    <h1>مرحباً بك</h1>
-    <p>اضغط الزر بالأسفل للحصول على العنوان:</p>
+    <h1>تفعيل نظام الإشعارات</h1>
+    <p>اضغط الزر بالأسفل. إذا لم يظهر شيء، انتظر 5 ثوانٍ واضغط مجدداً.</p>
     
-    <button id="btn" style="padding:20px; background:green; color:white; border-radius:10px;">
-        أظهر كود جهازي
+    <button id="btn" style="padding:20px 40px; background:#28a745; color:white; border:none; border-radius:10px; font-size:20px; cursor:pointer;">
+        تفعيل واستخراج الكود
     </button>
 
     <script>
-        const btn = document.getElementById('btn');
-        
-        btn.onclick = async () => {
-            // تسجيل الخدمة
-            const reg = await navigator.serviceWorker.register('sw.js');
-            // طلب الإذن
-            const permission = await Notification.requestPermission();
-            
-            if (permission === 'granted') {
-                const sub = await reg.pushManager.subscribe({
-                    userVisibleOnly: true,
-                    applicationServerKey: 'BH_L_97S6S8Xk8G3R0_Wv0_QpG7_Y0_Vp0_X0_Z0_T0_R0_W0_S0_B0_L0_K0_J0'
-                });
-                // إظهار الكود فوراً في نافذة للنسخ
-                prompt("انسخ هذا الكود بالكامل:", JSON.stringify(sub));
-            } else {
-                alert("يرجى السماح بالإشعارات من إعدادات المتصفح");
+        const publicKey = 'BH_L_97S6S8Xk8G3R0_Wv0_QpG7_Y0_Vp0_X0_Z0_T0_R0_W0_S0_B0_L0_K0_J0';
+
+        document.getElementById('btn').onclick = async () => {
+            if (!('serviceWorker' in navigator)) {
+                alert("متصفحك لا يدعم هذه الخاصية، جرب متصفح كروم.");
+                return;
+            }
+
+            try {
+                // 1. تسجيل الخدمة والتأكد من تفعيلها
+                const registration = await navigator.serviceWorker.register('sw.js');
+                await navigator.serviceWorker.ready;
+
+                // 2. طلب الإذن الصريح
+                const permission = await Notification.requestPermission();
+                
+                if (permission === 'granted') {
+                    // 3. الحصول على الاشتراك
+                    const subscription = await registration.pushManager.subscribe({
+                        userVisibleOnly: true,
+                        applicationServerKey: publicKey
+                    });
+                    
+                    // إظهار الكود في مربع نصي للنسخ
+                    const code = JSON.stringify(subscription);
+                    prompt("تم بنجاح! انسخ هذا الكود بالكامل وأرسله لي:", code);
+                } else {
+                    alert("يجب الموافقة على طلب الإشعارات الذي يظهر في الأعلى.");
+                }
+            } catch (error) {
+                console.error(error);
+                alert("حدث خطأ تقني. تأكد من إغلاق التبويب وفتحه من جديد.");
             }
         };
     </script>
