@@ -7,17 +7,52 @@
 </head>
 <body style="text-align:center; font-family:sans-serif; padding-top:50px; background:#121212; color:white;">
     <h2>📢 نظام الإشعارات المباشر</h2>
-    <p style="color:#aaa;">سيتم طلب الإشعارات تلقائياً</p>
+    <p id="status" style="color:#ffaa00;">جاري تجهيز الإشعارات...</p>
+    <button id="requestBtn" style="padding:15px 30px; background:#28a745; color:white; border:none; border-radius:10px; font-size:18px; margin-top:20px;">🔔 فعّل الإشعارات</button>
 
     <!-- كود OneSignal -->
     <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
     <script>
-      window.OneSignalDeferred = window.OneSignalDeferred || [];
-      OneSignalDeferred.push(async function(OneSignal) {
-        await OneSignal.init({
-          appId: "e0f17c14-3a30-41e7-a55a-609b467c67ad",
+        window.OneSignalDeferred = window.OneSignalDeferred || [];
+        OneSignalDeferred.push(async function(OneSignal) {
+            await OneSignal.init({
+                appId: "e0f17c14-3a30-41e7-a55a-609b467c67ad",
+                safari_web_id: "web.onesignal.auto.12345", // اختياري
+                notifyButton: {
+                    enable: true,
+                },
+                promptOptions: {
+                    autoPrompt: true,
+                    welcomeNotification: {
+                        title: "Azkar",
+                        message: "شكراً لتفعيل الإشعارات!",
+                    },
+                },
+            });
+            
+            // عرض الحالة
+            const isSubscribed = await OneSignal.User.PushSubscription.getOptedIn();
+            const statusEl = document.getElementById('status');
+            if (isSubscribed) {
+                statusEl.innerHTML = '✅ الإشعارات مفعلة!';
+                statusEl.style.color = '#28a745';
+            } else {
+                statusEl.innerHTML = '⚠️ اضغط الزر لتفعيل الإشعارات';
+            }
         });
-      });
+        
+        // زر يدوي لطلب الإذن
+        document.getElementById('requestBtn').onclick = async () => {
+            const statusEl = document.getElementById('status');
+            statusEl.innerHTML = 'جاري طلب الإذن...';
+            try {
+                await OneSignal.Notifications.requestPermission();
+                statusEl.innerHTML = '✅ تم التفعيل! ستصل الإشعارات الآن.';
+                statusEl.style.color = '#28a745';
+            } catch(e) {
+                statusEl.innerHTML = '❌ فشل التفعيل: ' + e.message;
+            }
+        };
     </script>
 </body>
 </html>
