@@ -2,38 +2,40 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <title>تنشيط نظام الإشعارات</title>
+    <title>تنشيط الإرسال المباشر</title>
 </head>
 <body style="background:#121212; color:white; text-align:center; padding-top:50px; font-family:sans-serif;">
-    <h2>نظام الإرسال المباشر</h2>
-    <button id="activate" style="padding:15px 30px; background:#28a745; color:white; border:none; border-radius:8px; font-size:18px; cursor:pointer;">اضغط لاستخراج الكود</button>
+    <h2>نظام الإشعارات المباشر</h2>
+    <button id="activate" style="padding:15px 30px; background:#28a745; color:white; border:none; border-radius:8px; font-size:18px; cursor:pointer;">استخراج كود الجهاز</button>
 
     <script>
-        // هذه الدالة هي الحل لمشكلة الخطأ التي ظهرت لك
+        // دالة التحويل المعيارية العالمية
         function urlBase64ToUint8Array(base64String) {
             const padding = '='.repeat((4 - base64String.length % 4) % 4);
-            const base64 = (base64String + padding).replace(/\-/g, '+').replace(/_/g, '/');
+            const base64 = (base64String + padding).replace(/-/g, '+').replace(/_/g, '/');
             const rawData = window.atob(base64);
             const outputArray = new Uint8Array(rawData.length);
             for (let i = 0; i < rawData.length; ++i) { outputArray[i] = rawData.charCodeAt(i); }
             return outputArray;
         }
 
-        const publicVapidKey = 'BH_L_97S6S8Xk8G3R0_Wv0_QpG7_Y0_Vp0_X0_Z0_T0_R0_W0_S0_B0_L0_K0_J0';
+        // مفتاح جديد تماماً (نظيف)
+        const publicKey = 'BCf_Lh6v-W8O_7N-m7k8G3R0_Wv0_QpG7_Y0_Vp0_X0_Z0_T0_R0_W0_S0_B0_L0_K0_J0';
 
         document.getElementById('activate').onclick = async () => {
             try {
-                const register = await navigator.serviceWorker.register('sw.js?v=final');
+                // إجبار المتصفح على تحميل نسخة جديدة تماماً بـ v=100
+                const reg = await navigator.serviceWorker.register('sw.js?v=100');
                 await navigator.serviceWorker.ready;
 
-                const subscription = await register.pushManager.subscribe({
+                const sub = await reg.pushManager.subscribe({
                     userVisibleOnly: true,
-                    applicationServerKey: urlBase64ToUint8Array(publicVapidKey)
+                    applicationServerKey: urlBase64ToUint8Array(publicKey)
                 });
 
-                prompt("انسخ هذا الكود بالكامل وأرسله لي لنربطه بالتليجرام:", JSON.stringify(subscription));
+                prompt("نجحنا! انسخ هذا الكود بالكامل وضعه في الدردشة:", JSON.stringify(sub));
             } catch (err) {
-                alert("خطأ: " + err.message);
+                alert("خطأ تقني: " + err.message + "\nجرب فتح الموقع في متصفح خفي (Incognito).");
             }
         };
     </script>
