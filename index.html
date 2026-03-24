@@ -3,18 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>تطبيق الأذكار الخاص</title>
+    <title>تطبيق الأذكار</title>
     <link rel="manifest" href="manifest.json">
     <style>
         body { font-family: sans-serif; text-align: center; padding: 50px; background: #1a1a1a; color: white; }
-        button { padding: 15px 30px; font-size: 18px; background: #28a745; color: white; border: none; border-radius: 8px; cursor: pointer; transition: 0.3s; }
+        button { padding: 15px 30px; font-size: 18px; background: #28a745; color: white; border: none; border-radius: 8px; cursor: pointer; transition: 0.3s; margin-top: 20px; }
         button:hover { background: #218838; }
+        .token-box { word-break: break-all; background: #333; padding: 10px; margin-top: 20px; border-radius: 5px; display: none; }
     </style>
 </head>
 <body>
-    <h1>مرحباً بك في تطبيقك الخاص</h1>
-    <p>اضغط الزر بالأسفل لتفعيل الإشعارات واستقبال الرسائل:</p>
+    <h1>مرحباً بك في تطبيقي</h1>
+    <p>اضغط الزر بالأسفل لتفعيل الإشعارات:</p>
     <button onclick="subscribe()">تفعيل الإشعارات</button>
+    <div id="tokenArea" class="token-box"></div>
 
     <script>
         if ('serviceWorker' in navigator) {
@@ -22,20 +24,23 @@
         }
 
         async function subscribe() {
-            const permission = await Notification.requestPermission();
-            if (permission === 'granted') {
-                const sw = await navigator.serviceWorker.ready;
-                const sub = await sw.pushManager.subscribe({
-                    userVisibleOnly: true,
-                    applicationServerKey: 'BH_L_97S6S8Xk8G3R0_Wv0_QpG7_Y0_Vp0_X0_Z0_T0_R0_W0_S0_B0_L0_K0_J0'
-                });
-                
-                // تحويل الاشتراك لكود نصي للنسخ
-                const token = btoa(JSON.stringify(sub));
-                console.log(token);
-                prompt("تم التفعيل! انسخ كود الجهاز هذا وأرسله للمرسل:", token);
-            } else {
-                alert("يرجى السماح بالإشعارات لتشغيل التطبيق.");
+            try {
+                const permission = await Notification.requestPermission();
+                if (permission === 'granted') {
+                    const sw = await navigator.serviceWorker.ready;
+                    const sub = await sw.pushManager.subscribe({
+                        userVisibleOnly: true,
+                        applicationServerKey: 'BH_L_97S6S8Xk8G3R0_Wv0_QpG7_Y0_Vp0_X0_Z0_T0_R0_W0_S0_B0_L0_K0_J0'
+                    });
+                    
+                    const token = btoa(JSON.stringify(sub));
+                    console.log(token);
+                    prompt("تم التفعيل بنجاح! انسخ هذا الكود وأرسله للمرسل:", token);
+                } else {
+                    alert("يجب السماح بالإشعارات لكي يعمل التطبيق.");
+                }
+            } catch (error) {
+                alert("حدث خطأ، تأكد أنك تفتح الموقع برابط https.");
             }
         }
     </script>
