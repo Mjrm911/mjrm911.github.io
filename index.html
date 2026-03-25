@@ -10,13 +10,25 @@
 window.OneSignalDeferred = window.OneSignalDeferred || [];
 
 OneSignalDeferred.push(async function(OneSignal) {
+
   await OneSignal.init({
     appId: "e0f17c14-3a30-41e7-a55a-609b467c67ad",
 
     notifyButton: {
       enable: true,
+    },
+
+    promptOptions: {
+      slidedown: {
+        enabled: true,
+        autoPrompt: true
+      }
     }
   });
+
+  // هذا السطر هو السر 🔥
+  OneSignal.showSlidedownPrompt();
+
 });
 </script>
 
@@ -35,7 +47,7 @@ body {
 <body>
 
 <h2>🔔 نظام الإشعارات</h2>
-<p>اضغط على الجرس لتفعيل الإشعارات</p>
+<p>اضغط على السماح لتفعيل الإشعارات</p>
 
 </body>
 </html>
