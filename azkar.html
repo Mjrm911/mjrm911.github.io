@@ -331,7 +331,7 @@
         <div class="zikr-container" id="zikrContainer">
             <div class="current-zikr" id="zikrText">بسم الله الرحمن الرحيم</div>
             <div class="zikr-translation" id="zikrTranslation">البدء بذكر الله</div>
-            <div class="zikr-benefit" id="zikrBenefit">🌟 فضل الذكر: طمأنينة القلب</div>
+            <div class="zikr-benefit" id="zikrBenefit">فضل الذكر: طمأنينة القلب</div>
         </div>
         
         <!-- مؤقت التبديل -->
@@ -387,7 +387,7 @@
     </div>
 
     <script>
-        // قائمة الأذكار (يمكنك إضافة المزيد)
+        // قائمة الأذكار (بدون زخارف)
         const azkarList = [
             {
                 text: "سُبْحَانَ اللَّهِ وَبِحَمْدِهِ",
@@ -467,12 +467,12 @@
             const zikr = azkarList[currentIndex];
             zikrText.textContent = zikr.text;
             zikrTranslation.textContent = zikr.translation;
-            zikrBenefit.textContent = `🌟 ${zikr.benefit}`;
+            zikrBenefit.textContent = zikr.benefit;
             
             // تأثير الحركة
             const container = document.getElementById('zikrContainer');
             container.classList.remove('fade-in');
-            void container.offsetWidth; // إعادة تعيين الأنيميشن
+            void container.offsetWidth;
             container.classList.add('fade-in');
         }
         
@@ -499,12 +499,6 @@
         // تحديث العدادات
         function updateCounters() {
             zikrCounterSpan.textContent = zikrCounter;
-            sessionCounterSpan.textContent = sessionCounter;
-        }
-        
-        // إعادة تعيين عداد الجلسة
-        function resetSessionCounter() {
-            sessionCounter = 0;
             sessionCounterSpan.textContent = sessionCounter;
         }
         
@@ -570,7 +564,6 @@
             speedText.textContent = `السرعة: ${speed} ثواني`;
             timerSecondsSpan.textContent = speed;
             
-            // إعادة ضبط المؤقت بالسرعة الجديدة
             if (isPlaying) {
                 resetTimer();
             } else {
@@ -589,19 +582,11 @@
         
         // ربط الأحداث
         document.getElementById('nextBtn').onclick = () => {
-            if (!isPlaying) {
-                nextZikr();
-            } else {
-                nextZikr();
-            }
+            nextZikr();
         };
         
         document.getElementById('prevBtn').onclick = () => {
-            if (!isPlaying) {
-                prevZikr();
-            } else {
-                prevZikr();
-            }
+            prevZikr();
         };
         
         document.getElementById('playPauseBtn').onclick = togglePlayPause;
@@ -619,12 +604,12 @@
         
         init();
         
-        // حفظ العداد عند مغادرة الصفحة (اختياري)
+        // حفظ العداد عند مغادرة الصفحة
         window.addEventListener('beforeunload', () => {
             localStorage.setItem('azkar_total_counter', zikrCounter);
         });
         
-        // استعادة العداد (اختياري)
+        // استعادة العداد
         const savedCounter = localStorage.getItem('azkar_total_counter');
         if (savedCounter) {
             zikrCounter = parseInt(savedCounter);
