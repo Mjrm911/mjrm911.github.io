@@ -1,53 +1,27 @@
 <!DOCTYPE html>
-<html lang="ar">
+<html lang="ar" dir="rtl">
 <head>
-<meta charset="UTF-8">
-<title>الإشعارات</title>
-
-<script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
-
-<script>
-window.OneSignalDeferred = window.OneSignalDeferred || [];
-
-OneSignalDeferred.push(async function(OneSignal) {
-
-  await OneSignal.init({
-    appId: "e0f17c14-3a30-41e7-a55a-609b467c67ad",
-
-    notifyButton: {
-      enable: true,
-    },
-
-    promptOptions: {
-      slidedown: {
-        enabled: true,
-        autoPrompt: true
-      }
-    }
-  });
-
-  // هذا السطر هو السر 🔥
-  OneSignal.showSlidedownPrompt();
-
-});
-</script>
-
-<style>
-body {
-  background:#121212;
-  color:white;
-  text-align:center;
-  padding-top:100px;
-  font-family:sans-serif;
-}
-</style>
-
+    <meta charset="UTF-8">
+    <title>نظام الأذكار المطور</title>
+    <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
+    <script>
+      window.OneSignalDeferred = window.OneSignalDeferred || [];
+      OneSignalDeferred.push(async function(OneSignal) {
+        await OneSignal.init({
+          appId: "e0f17c14-3a30-41e7-a55a-609b467c67ad",
+          // بما أنك على الرابط الرئيسي، نستخدم المسار المباشر
+          serviceWorkerPath: "OneSignalSDKWorker.js",
+          serviceWorkerParam: { scope: "/" }, 
+          notifyButton: { enable: true }
+        });
+        OneSignal.showSlidedownPrompt(); 
+      });
+    </script>
 </head>
-
-<body>
-
-<h2>🔔 نظام الإشعارات</h2>
-<p>اضغط على السماح لتفعيل الإشعارات</p>
-
+<body style="background:#121212; color:white; text-align:center; padding-top:100px; font-family:sans-serif;">
+    <div style="border:1px solid #333; padding:20px; display:inline-block; border-radius:15px; background:#1e1e1e;">
+        <h2>✨ نظام الأذكار المباشر</h2>
+        <p>إذا لم يظهر طلب الاشتراك، يرجى الضغط على الجرس</p>
+    </div>
 </body>
 </html>
