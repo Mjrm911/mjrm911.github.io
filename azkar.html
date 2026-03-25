@@ -29,7 +29,6 @@
             overflow-x: hidden;
         }
         
-        /* خلفية متحركة */
         .bg-animation {
             position: fixed;
             top: 0;
@@ -65,7 +64,6 @@
             to { transform: rotate(360deg); }
         }
         
-        /* البطاقة الرئيسية */
         .azkar-card {
             position: relative;
             z-index: 10;
@@ -82,7 +80,6 @@
             transition: all 0.3s ease;
         }
         
-        /* شعار */
         .logo {
             width: 80px;
             height: 80px;
@@ -106,7 +103,6 @@
             color: white;
         }
         
-        /* عداد التسبيح */
         .counter-section {
             display: flex;
             justify-content: center;
@@ -138,7 +134,6 @@
             color: #94a3b8;
         }
         
-        /* حاوية الذكر المتحرك */
         .zikr-container {
             background: rgba(0, 0, 0, 0.5);
             border-radius: 50px;
@@ -171,7 +166,6 @@
             margin-top: 10px;
         }
         
-        /* مؤقت التبديل */
         .timer {
             display: flex;
             align-items: center;
@@ -198,7 +192,6 @@
             transition: width 1s linear;
         }
         
-        /* أزرار التحكم */
         .controls {
             display: flex;
             gap: 15px;
@@ -238,7 +231,6 @@
             box-shadow: 0 5px 15px rgba(56, 189, 248, 0.4);
         }
         
-        /* زر العودة */
         .back-link {
             margin-top: 25px;
             padding-top: 20px;
@@ -260,14 +252,12 @@
             color: #818cf8;
         }
         
-        /* footer */
         .footer {
             margin-top: 25px;
             font-size: 0.7rem;
             color: #475569;
         }
         
-        /* تأثيرات */
         @keyframes fadeInUp {
             from {
                 opacity: 0;
@@ -315,7 +305,6 @@
         
         <h1 style="font-size:1.8rem; margin-bottom:10px; background:linear-gradient(135deg,#fff,#94a3b8); -webkit-background-clip:text; background-clip:text; color:transparent;">أذكار اليوم</h1>
         
-        <!-- عداد التسبيح -->
         <div class="counter-section">
             <div class="counter-box">
                 <span class="counter-number" id="zikrCounter">0</span>
@@ -327,14 +316,12 @@
             </div>
         </div>
         
-        <!-- حاوية الذكر المتحرك -->
         <div class="zikr-container" id="zikrContainer">
             <div class="current-zikr" id="zikrText">بسم الله الرحمن الرحيم</div>
             <div class="zikr-translation" id="zikrTranslation">البدء بذكر الله</div>
             <div class="zikr-benefit" id="zikrBenefit">فضل الذكر: طمأنينة القلب</div>
         </div>
         
-        <!-- مؤقت التبديل -->
         <div class="timer">
             <i class="fas fa-hourglass-half"></i>
             <span>الذكر القادم بعد</span>
@@ -345,7 +332,6 @@
             </div>
         </div>
         
-        <!-- أزرار التحكم -->
         <div class="controls">
             <button class="control-btn" id="prevBtn">
                 <i class="fas fa-arrow-right"></i>
@@ -387,66 +373,122 @@
     </div>
 
     <script>
-        // قائمة الأذكار (بدون زخارف)
+        // ==================== 50 ذكرًا صحيحًا ====================
         const azkarList = [
-            {
-                text: "سُبْحَانَ اللَّهِ وَبِحَمْدِهِ",
-                translation: "سبحان الله وبحمده",
-                benefit: "فضل: من قالها مائة مرة حطت خطاياه"
-            },
-            {
-                text: "سُبْحَانَ اللَّهِ الْعَظِيمِ",
-                translation: "سبحان الله العظيم",
-                benefit: "فضل: كلمتان خفيفتان على اللسان ثقيلتان في الميزان"
-            },
-            {
-                text: "لَا إِلَٰهَ إِلَّا اللَّهُ",
-                translation: "لا إله إلا الله",
-                benefit: "فضل: أفضل الذكر"
-            },
-            {
-                text: "اللَّهُمَّ صَلِّ عَلَى مُحَمَّدٍ",
-                translation: "اللهم صل على محمد",
-                benefit: "فضل: من صلى عليَّ واحدة صلى الله عليه بها عشراً"
-            },
-            {
-                text: "أَسْتَغْفِرُ اللَّهَ وَأَتُوبُ إِلَيْهِ",
-                translation: "أستغفر الله وأتوب إليه",
-                benefit: "فضل: من لزم الاستغفار جعل الله له من كل هم فرجاً"
-            },
-            {
-                text: "حَسْبِيَ اللَّهُ لَا إِلَٰهَ إِلَّا هُوَ",
-                translation: "حسبي الله لا إله إلا هو",
-                benefit: "فضل: من قالها حين يصبح وحين يمسي كفاه الله ما أهمه"
-            },
-            {
-                text: "رَضِيتُ بِاللَّهِ رَبًّا وَبِالْإِسْلَامِ دِينًا",
-                translation: "رضيت بالله رباً وبالإسلام ديناً",
-                benefit: "فضل: من قالها حين يمسي كان حقاً على الله أن يرضيه"
-            },
-            {
-                text: "اللَّهُمَّ إِنِّي أَسْأَلُكَ الْعَفْوَ وَالْعَافِيَةَ",
-                translation: "اللهم إني أسألك العفو والعافية",
-                benefit: "فضل: دعاء جامع للدنيا والآخرة"
-            },
-            {
-                text: "لَا حَوْلَ وَلَا قُوَّةَ إِلَّا بِاللَّهِ",
-                translation: "لا حول ولا قوة إلا بالله",
-                benefit: "فضل: كنز من كنوز الجنة"
-            },
-            {
-                text: "اللَّهُمَّ أَنْتَ السَّلَامُ وَمِنْكَ السَّلَامُ",
-                translation: "اللهم أنت السلام ومنك السلام",
-                benefit: "فضل: تقال بعد الصلاة"
-            }
+            { text: "سُبْحَانَ اللَّهِ وَبِحَمْدِهِ", translation: "سبحان الله وبحمده", benefit: "فضل: من قالها مائة مرة حطت خطاياه" },
+            { text: "سُبْحَانَ اللَّهِ الْعَظِيمِ", translation: "سبحان الله العظيم", benefit: "فضل: كلمتان خفيفتان على اللسان ثقيلتان في الميزان" },
+            { text: "لَا إِلَٰهَ إِلَّا اللَّهُ", translation: "لا إله إلا الله", benefit: "فضل: أفضل الذكر" },
+            { text: "اللَّهُمَّ صَلِّ عَلَى مُحَمَّدٍ وَعَلَى آلِ مُحَمَّدٍ", translation: "اللهم صل على محمد وعلى آل محمد", benefit: "فضل: من صلى عليَّ واحدة صلى الله عليه بها عشراً" },
+            { text: "أَسْتَغْفِرُ اللَّهَ", translation: "أستغفر الله", benefit: "فضل: من قالها في اليوم مائة مرة غفرت ذنوبه" },
+            { text: "أَسْتَغْفِرُ اللَّهَ وَأَتُوبُ إِلَيْهِ", translation: "أستغفر الله وأتوب إليه", benefit: "فضل: من لزم الاستغفار جعل الله له من كل هم فرجاً" },
+            { text: "حَسْبِيَ اللَّهُ لَا إِلَٰهَ إِلَّا هُوَ عَلَيْهِ تَوَكَّلْتُ", translation: "حسبي الله لا إله إلا هو عليه توكلت", benefit: "فضل: من قالها حين يصبح وحين يمسي كفاه الله ما أهمه" },
+            { text: "رَضِيتُ بِاللَّهِ رَبًّا وَبِالْإِسْلَامِ دِينًا وَبِمُحَمَّدٍ نَبِيًّا", translation: "رضيت بالله رباً وبالإسلام ديناً وبمحمد نبياً", benefit: "فضل: من قالها حين يمسي كان حقاً على الله أن يرضيه" },
+            { text: "اللَّهُمَّ إِنِّي أَسْأَلُكَ الْعَفْوَ وَالْعَافِيَةَ", translation: "اللهم إني أسألك العفو والعافية", benefit: "فضل: دعاء جامع للدنيا والآخرة" },
+            { text: "لَا حَوْلَ وَلَا قُوَّةَ إِلَّا بِاللَّهِ", translation: "لا حول ولا قوة إلا بالله", benefit: "فضل: كنز من كنوز الجنة" },
+            { text: "سُبْحَانَ اللَّهِ", translation: "سبحان الله", benefit: "فضل: تسبيح الخلق كله" },
+            { text: "الْحَمْدُ لِلَّهِ", translation: "الحمد لله", benefit: "فضل: تملأ الميزان" },
+            { text: "اللَّهُ أَكْبَرُ", translation: "الله أكبر", benefit: "فضل: من أحب الكلام إلى الله" },
+            { text: "لَا إِلَٰهَ إِلَّا اللَّهُ وَحْدَهُ لَا شَرِيكَ لَهُ", translation: "لا إله إلا الله وحده لا شريك له", benefit: "فضل: أفضل ذكر" },
+            { text: "سُبْحَانَ اللَّهِ وَالْحَمْدُ لِلَّهِ وَلَا إِلَٰهَ إِلَّا اللَّهُ وَاللَّهُ أَكْبَرُ", translation: "سبحان الله والحمد لله ولا إله إلا الله والله أكبر", benefit: "فضل: أحب الكلام إلى الله" },
+            { text: "اللَّهُمَّ أَنْتَ السَّلَامُ وَمِنْكَ السَّلَامُ تَبَارَكْتَ يَا ذَا الْجَلَالِ وَالْإِكْرَامِ", translation: "اللهم أنت السلام ومنك السلام تباركت يا ذا الجلال والإكرام", benefit: "فضل: يقال بعد الصلاة" },
+            { text: "اللَّهُمَّ أَعِنِّي عَلَى ذِكْرِكَ وَشُكْرِكَ وَحُسْنِ عِبَادَتِكَ", translation: "اللهم أعني على ذكرك وشكرك وحسن عبادتك", benefit: "فضل: دعاء النبي صلى الله عليه وسلم" },
+            { text: "رَبِّ اغْفِرْ لِي", translation: "رب اغفر لي", benefit: "فضل: من أفضل الاستغفار" },
+            { text: "رَبِّ ارْحَمْهُمَا كَمَا رَبَّيَانِي صَغِيرًا", translation: "رب ارحمهما كما ربياني صغيراً", benefit: "فضل: دعاء الوالدين" },
+            { text: "رَبِّ زِدْنِي عِلْمًا", translation: "رب زدني علماً", benefit: "فضل: دعاء طلب العلم" },
+            { text: "اللَّهُمَّ إِنِّي ظَلَمْتُ نَفْسِي ظُلْمًا كَثِيرًا", translation: "اللهم إني ظلمت نفسي ظلماً كثيراً", benefit: "فضل: دعاء سيد الاستغفار" },
+            { text: "اللَّهُمَّ إِنِّي أَعُوذُ بِكَ مِنَ الْهَمِّ وَالْحَزَنِ", translation: "اللهم إني أعوذ بك من الهم والحزن", benefit: "فضل: دعاء الكرب" },
+            { text: "اللَّهُمَّ إِنِّي أَعُوذُ بِكَ مِنَ الْعَجْزِ وَالْكَسَلِ", translation: "اللهم إني أعوذ بك من العجز والكسل", benefit: "فضل: دعاء النشاط" },
+            { text: "اللَّهُمَّ إِنِّي أَسْأَلُكَ الْجَنَّةَ", translation: "اللهم إني أسألك الجنة", benefit: "فضل: سؤال الجنة" },
+            { text: "اللَّهُمَّ قِنِي عَذَابَ النَّارِ", translation: "اللهم قني عذاب النار", benefit: "فضل: سبع مرات كل يوم" },
+            { text: "اللَّهُمَّ إِنِّي أَسْأَلُكَ الْهُدَى وَالتُّقَى وَالْعَفَافَ وَالْغِنَى", translation: "اللهم إني أسألك الهدى والتقى والعفاف والغنى", benefit: "فضل: دعاء جامع" },
+            { text: "اللَّهُمَّ أَصْلِحْ لِي دِينِي الَّذِي هُوَ عِصْمَةُ أَمْرِي", translation: "اللهم أصلح لي ديني الذي هو عصمة أمري", benefit: "فضل: دعاء الصلاح" },
+            { text: "اللَّهُمَّ بَارِكْ لِي فِي أَهْلِي وَمَالِي", translation: "اللهم بارك لي في أهلي ومالي", benefit: "فضل: دعاء البركة" },
+            { text: "اللَّهُمَّ إِنِّي أَسْأَلُكَ حُبَّكَ وَحُبَّ مَنْ يُحِبُّكَ", translation: "اللهم إني أسألك حبك وحب من يحبك", benefit: "فضل: دعاء المحبة" },
+            { text: "اللَّهُمَّ إِنِّي أَسْأَلُكَ الرِّضَا بَعْدَ الْقَضَاءِ", translation: "اللهم إني أسألك الرضا بعد القضاء", benefit: "فضل: دعاء التسليم" },
+            { text: "اللَّهُمَّ إِنِّي أَسْأَلُكَ نَعِيمًا لَا يَنْفَدُ", translation: "اللهم إني أسألك نعيماً لا ينفد", benefit: "فضل: دعاء الجنة" },
+            { text: "اللَّهُمَّ إِنِّي أَسْأَلُكَ الْعَافِيَةَ فِي الدُّنْيَا وَالْآخِرَةِ", translation: "اللهم إني أسألك العافية في الدنيا والآخرة", benefit: "فضل: دعاء العافية" },
+            { text: "اللَّهُمَّ إِنِّي أَسْأَلُكَ عِلْمًا نَافِعًا", translation: "اللهم إني أسألك علماً نافعاً", benefit: "فضل: دعاء العلم النافع" },
+            { text: "اللَّهُمَّ إِنِّي أَسْأَلُكَ رِزْقًا حَلَالًا طَيِّبًا", translation: "اللهم إني أسألك رزقاً حلالاً طيباً", benefit: "فضل: دعاء الرزق" },
+            { text: "اللَّهُمَّ إِنِّي أَسْأَلُكَ صِحَّةً فِي بَدَنِي", translation: "اللهم إني أسألك صحة في بدني", benefit: "فضل: دعاء الصحة" },
+            { text: "اللَّهُمَّ إِنِّي أَسْأَلُكَ قَلْبًا سَلِيمًا", translation: "اللهم إني أسألك قلباً سليماً", benefit: "فضل: دعاء القلب السليم" },
+            { text: "اللَّهُمَّ إِنِّي أَسْأَلُكَ لِسَانًا صَادِقًا", translation: "اللهم إني أسألك لساناً صادقاً", benefit: "فضل: دعاء الصدق" },
+            { text: "اللَّهُمَّ إِنِّي أَسْأَلُكَ عَمَلًا مُتَقَبَّلًا", translation: "اللهم إني أسألك عملاً متقبلاً", benefit: "فضل: دعاء القبول" },
+            { text: "اللَّهُمَّ إِنِّي أَسْأَلُكَ الثَّبَاتَ عَلَى الدِّينِ", translation: "اللهم إني أسألك الثبات على الدين", benefit: "فضل: دعاء الثبات" },
+            { text: "اللَّهُمَّ إِنِّي أَسْأَلُكَ الْجَنَّةَ وَأَعُوذُ بِكَ مِنَ النَّارِ", translation: "اللهم إني أسألك الجنة وأعوذ بك من النار", benefit: "فضل: دعاء الخير كله" },
+            { text: "اللَّهُمَّ اجْعَلْنِي مِنَ الشَّاكِرِينَ", translation: "اللهم اجعلني من الشاكرين", benefit: "فضل: دعاء الشكر" },
+            { text: "اللَّهُمَّ اجْعَلْنِي مِنَ الصَّابِرِينَ", translation: "اللهم اجعلني من الصابرين", benefit: "فضل: دعاء الصبر" },
+            { text: "اللَّهُمَّ اجْعَلْنِي مِنَ التَّائِبِينَ", translation: "اللهم اجعلني من التائبين", benefit: "فضل: دعاء التوبة" },
+            { text: "اللَّهُمَّ اجْعَلْنِي مِنَ الْمُتَطَهِّرِينَ", translation: "اللهم اجعلني من المتطهرين", benefit: "فضل: دعاء الطهارة" },
+            { text: "اللَّهُمَّ اجْعَلْنِي مِنَ الْمُقَرَّبِينَ", translation: "اللهم اجعلني من المقربين", benefit: "فضل: دعاء القرب من الله" },
+            { text: "اللَّهُمَّ اجْعَلْنِي مِنْ عِبَادِكَ الصَّالِحِينَ", translation: "اللهم اجعلني من عبادك الصالحين", benefit: "فضل: دعاء الصلاح" },
+            { text: "اللَّهُمَّ تَقَبَّلْ مِنِّي صَالِحَ الْأَعْمَالِ", translation: "اللهم تقبل مني صالح الأعمال", benefit: "فضل: دعاء القبول" },
+            { text: "اللَّهُمَّ ارْزُقْنِي حُسْنَ الْخَاتِمَةِ", translation: "اللهم ارزقني حسن الخاتمة", benefit: "فضل: دعاء الخاتمة" },
+            { text: "اللَّهُمَّ اجْعَلْ خَيْرَ عُمُرِي آخِرَهُ", translation: "اللهم اجعل خير عمري آخره", benefit: "فضل: دعاء الختام" }
         ];
+
+        // ==================== 50 دعاءً قصيرًا ====================
+        const doaaList = [
+            { text: "رَبَّنَا آتِنَا فِي الدُّنْيَا حَسَنَةً وَفِي الْآخِرَةِ حَسَنَةً وَقِنَا عَذَابَ النَّارِ", translation: "ربنا آتنا في الدنيا حسنة وفي الآخرة حسنة وقنا عذاب النار", benefit: "دعاء جامع" },
+            { text: "رَبَّنَا لَا تُزِغْ قُلُوبَنَا بَعْدَ إِذْ هَدَيْتَنَا", translation: "ربنا لا تزغ قلوبنا بعد إذ هديتنا", benefit: "دعاء الثبات" },
+            { text: "رَبَّنَا اغْفِرْ لَنَا وَلِإِخْوَانِنَا الَّذِينَ سَبَقُونَا بِالْإِيمَانِ", translation: "ربنا اغفر لنا ولإخواننا الذين سبقونا بالإيمان", benefit: "دعاء للمؤمنين" },
+            { text: "رَبَّنَا هَبْ لَنَا مِنْ أَزْوَاجِنَا وَذُرِّيَّاتِنَا قُرَّةَ أَعْيُنٍ", translation: "ربنا هب لنا من أزواجنا وذرياتنا قرة أعين", benefit: "دعاء الأسرة" },
+            { text: "رَبَّنَا اجْعَلْنَا مُسْلِمَيْنِ لَكَ وَمِنْ ذُرِّيَّتِنَا أُمَّةً مُسْلِمَةً", translation: "ربنا اجعلنا مسلمين لك ومن ذريتنا أمة مسلمة", benefit: "دعاء الإسلام" },
+            { text: "رَبَّنَا تَقَبَّلْ مِنَّا إِنَّكَ أَنْتَ السَّمِيعُ الْعَلِيمُ", translation: "ربنا تقبل منا إنك أنت السميع العليم", benefit: "دعاء القبول" },
+            { text: "رَبَّنَا اصْرِفْ عَنَّا عَذَابَ جَهَنَّمَ إِنَّ عَذَابَهَا كَانَ غَرَامًا", translation: "ربنا اصرف عنا عذاب جهنم", benefit: "دعاء النجاة" },
+            { text: "رَبِّ اشْرَحْ لِي صَدْرِي وَيَسِّرْ لِي أَمْرِي", translation: "رب اشرح لي صدري ويسر لي أمري", benefit: "دعاء موسى عليه السلام" },
+            { text: "رَبِّ أَوْزِعْنِي أَنْ أَشْكُرَ نِعْمَتَكَ الَّتِي أَنْعَمْتَ عَلَيَّ", translation: "رب أوزعني أن أشكر نعمتك", benefit: "دعاء الشكر" },
+            { text: "رَبِّ هَبْ لِي حُكْمًا وَأَلْحِقْنِي بِالصَّالِحِينَ", translation: "رب هب لي حكماً وألحقني بالصالحين", benefit: "دعاء الحكمة" },
+            { text: "اللَّهُمَّ أَنْتَ رَبِّي لَا إِلَهَ إِلَّا أَنْتَ خَلَقْتَنِي وَأَنَا عَبْدُكَ", translation: "اللهم أنت ربي لا إله إلا أنت خلقتني وأنا عبدك", benefit: "سيد الاستغفار" },
+            { text: "اللَّهُمَّ إِنِّي أَسْأَلُكَ بِأَنَّ لَكَ الْحَمْدَ لَا إِلَهَ إِلَّا أَنْتَ", translation: "اللهم إني أسألك بأن لك الحمد لا إله إلا أنت", benefit: "دعاء عظيم" },
+            { text: "اللَّهُمَّ إِنِّي أَسْأَلُكَ بِأَنِّي أَشْهَدُ أَنَّكَ أَنْتَ اللَّهُ لَا إِلَهَ إِلَّا أَنْتَ", translation: "اللهم إني أسألك بأني أشهد أنك أنت الله لا إله إلا أنت", benefit: "دعاء مستجاب" },
+            { text: "اللَّهُمَّ إِنِّي أَسْأَلُكَ مِنْ خَيْرِ مَا سَأَلَكَ عَبْدُكَ وَنَبِيُّكَ", translation: "اللهم إني أسألك من خير ما سألك عبدك ونبيك", benefit: "دعاء جامع" },
+            { text: "اللَّهُمَّ إِنِّي أَعُوذُ بِكَ مِنْ شَرِّ مَا عَمِلْتُ وَمِنْ شَرِّ مَا لَمْ أَعْمَلْ", translation: "اللهم إني أعوذ بك من شر ما عملت ومن شر ما لم أعمل", benefit: "دعاء الوقاية" },
+            { text: "اللَّهُمَّ إِنِّي أَعُوذُ بِكَ مِنْ زَوَالِ نِعْمَتِكَ وَتَحَوُّلِ عَافِيَتِكَ", translation: "اللهم إني أعوذ بك من زوال نعمتك وتحول عافيتك", benefit: "دعاء الخوف" },
+            { text: "اللَّهُمَّ إِنِّي أَعُوذُ بِكَ مِنَ الْكُفْرِ وَالْفَقْرِ", translation: "اللهم إني أعوذ بك من الكفر والفقر", benefit: "دعاء الغنى" },
+            { text: "اللَّهُمَّ إِنِّي أَعُوذُ بِكَ مِنْ عَذَابِ الْقَبْرِ", translation: "اللهم إني أعوذ بك من عذاب القبر", benefit: "دعاء القبر" },
+            { text: "اللَّهُمَّ إِنِّي أَعُوذُ بِكَ مِنْ فِتْنَةِ الْمَحْيَا وَالْمَمَاتِ", translation: "اللهم إني أعوذ بك من فتنة المحيا والممات", benefit: "دعاء الفتن" },
+            { text: "اللَّهُمَّ إِنِّي أَعُوذُ بِكَ مِنْ شَرِّ مَا خَلَقْتَ", translation: "اللهم إني أعوذ بك من شر ما خلقت", benefit: "دعاء عام" },
+            { text: "اللَّهُمَّ اجْعَلْنِي مِنْ أَهْلِ الْجَنَّةِ بِغَيْرِ حِسَابٍ", translation: "اللهم اجعلني من أهل الجنة بغير حساب", benefit: "دعاء الجنة" },
+            { text: "اللَّهُمَّ إِنِّي أَسْأَلُكَ الْفِرْدَوْسَ الْأَعْلَى", translation: "اللهم إني أسألك الفردوس الأعلى", benefit: "دعاء أعلى الجنة" },
+            { text: "اللَّهُمَّ إِنِّي أَسْأَلُكَ نَعِيمًا لَا يَنْقَطِعُ", translation: "اللهم إني أسألك نعيماً لا ينقطع", benefit: "دعاء النعيم الدائم" },
+            { text: "اللَّهُمَّ إِنِّي أَسْأَلُكَ الْعَيْشَ السَّعِيدَ", translation: "اللهم إني أسألك العيش السعيد", benefit: "دعاء السعادة" },
+            { text: "اللَّهُمَّ إِنِّي أَسْأَلُكَ الصِّحَّةَ وَالْعَافِيَةَ", translation: "اللهم إني أسألك الصحة والعافية", benefit: "دعاء الصحة" },
+            { text: "اللَّهُمَّ إِنِّي أَسْأَلُكَ الْغِنَى وَالْعِزَّ", translation: "اللهم إني أسألك الغنى والعز", benefit: "دعاء العزة" },
+            { text: "اللَّهُمَّ إِنِّي أَسْأَلُكَ الْبَرَكَةَ فِي الْعُمْرِ", translation: "اللهم إني أسألك البركة في العمر", benefit: "دعاء البركة" },
+            { text: "اللَّهُمَّ إِنِّي أَسْأَلُكَ حُسْنَ الْخُلُقِ", translation: "اللهم إني أسألك حسن الخلق", benefit: "دعاء الأخلاق" },
+            { text: "اللَّهُمَّ إِنِّي أَسْأَلُكَ الرِّزْقَ الْوَاسِعَ", translation: "اللهم إني أسألك الرزق الواسع", benefit: "دعاء الرزق" },
+            { text: "اللَّهُمَّ إِنِّي أَسْأَلُكَ الْيُسْرَ بَعْدَ الْعُسْرِ", translation: "اللهم إني أسألك اليسر بعد العسر", benefit: "دعاء التيسير" },
+            { text: "اللَّهُمَّ إِنِّي أَسْأَلُكَ الرَّاحَةَ عِنْدَ الْمَوْتِ", translation: "اللهم إني أسألك الراحة عند الموت", benefit: "دعاء سكرات الموت" },
+            { text: "اللَّهُمَّ إِنِّي أَسْأَلُكَ النَّظَرَ إِلَى وَجْهِكَ الْكَرِيمِ", translation: "اللهم إني أسألك النظر إلى وجهك الكريم", benefit: "دعاء رؤية الله" },
+            { text: "اللَّهُمَّ إِنِّي أَسْأَلُكَ شَفَاعَةَ النَّبِيِّ مُحَمَّدٍ", translation: "اللهم إني أسألك شفاعة النبي محمد", benefit: "دعاء الشفاعة" },
+            { text: "اللَّهُمَّ إِنِّي أَسْأَلُكَ الْوَلَايَةَ فِي الدِّينِ", translation: "اللهم إني أسألك الولاية في الدين", benefit: "دعاء التمسك بالدين" },
+            { text: "اللَّهُمَّ إِنِّي أَسْأَلُكَ الصِّدْقَ فِي الْحَدِيثِ", translation: "اللهم إني أسألك الصدق في الحديث", benefit: "دعاء الصدق" },
+            { text: "اللَّهُمَّ إِنِّي أَسْأَلُكَ الْأَمَانَةَ فِي الْمُعَامَلَةِ", translation: "اللهم إني أسألك الأمانة في المعاملة", benefit: "دعاء الأمانة" },
+            { text: "اللَّهُمَّ إِنِّي أَسْأَلُكَ الْوَفَاءَ بِالْعَهْدِ", translation: "اللهم إني أسألك الوفاء بالعهد", benefit: "دعاء الوفاء" },
+            { text: "اللَّهُمَّ إِنِّي أَسْأَلُكَ الرِّفْقَ فِي الْأَمْرِ", translation: "اللهم إني أسألك الرفق في الأمر", benefit: "دعاء الرفق" },
+            { text: "اللَّهُمَّ إِنِّي أَسْأَلُكَ الْحِلْمَ عِنْدَ الْغَضَبِ", translation: "اللهم إني أسألك الحلم عند الغضب", benefit: "دعاء الحلم" },
+            { text: "اللَّهُمَّ إِنِّي أَسْأَلُكَ الصَّبْرَ عَلَى الْبَلَاءِ", translation: "اللهم إني أسألك الصبر على البلاء", benefit: "دعاء الصبر" },
+            { text: "اللَّهُمَّ إِنِّي أَسْأَلُكَ الرِّضَا بِالْقَضَاءِ", translation: "اللهم إني أسألك الرضا بالقضاء", benefit: "دعاء الرضا" },
+            { text: "اللَّهُمَّ إِنِّي أَسْأَلُكَ التَّوْبَةَ قَبْلَ الْمَوْتِ", translation: "اللهم إني أسألك التوبة قبل الموت", benefit: "دعاء التوبة" },
+            { text: "اللَّهُمَّ إِنِّي أَسْأَلُكَ الْمَغْفِرَةَ بَعْدَ الْمَوْتِ", translation: "اللهم إني أسألك المغفرة بعد الموت", benefit: "دعاء المغفرة" },
+            { text: "اللَّهُمَّ إِنِّي أَسْأَلُكَ الْجَنَّةَ مَعَ الْأَبْرَارِ", translation: "اللهم إني أسألك الجنة مع الأبرار", benefit: "دعاء الرفقة الصالحة" },
+            { text: "اللَّهُمَّ إِنِّي أَسْأَلُكَ الْعَفْوَ عِنْدَ الْحِسَابِ", translation: "اللهم إني أسألك العفو عند الحساب", benefit: "دعاء الحساب" },
+            { text: "اللَّهُمَّ إِنِّي أَسْأَلُكَ النَّجَاةَ مِنَ النَّارِ", translation: "اللهم إني أسألك النجاة من النار", benefit: "دعاء النجاة" },
+            { text: "اللَّهُمَّ إِنِّي أَسْأَلُكَ الْفَوْزَ بِالْجَنَّةِ", translation: "اللهم إني أسألك الفوز بالجنة", benefit: "دعاء الفوز" },
+            { text: "اللَّهُمَّ إِنِّي أَسْأَلُكَ رِضَاكَ وَالْجَنَّةَ", translation: "اللهم إني أسألك رضاك والجنة", benefit: "دعاء الرضوان" },
+            { text: "اللَّهُمَّ إِنِّي أَسْأَلُكَ الْعَافِيَةَ فِي الدَّارَيْنِ", translation: "اللهم إني أسألك العافية في الدارين", benefit: "دعاء العافية في الدنيا والآخرة" },
+            { text: "اللَّهُمَّ إِنِّي أَسْأَلُكَ خَيْرَ الدُّنْيَا وَالْآخِرَةِ", translation: "اللهم إني أسألك خير الدنيا والآخرة", benefit: "دعاء الخير كله" }
+        ];
+
+        // دمج القائمتين: 50 ذكرًا ثم 50 دعاءً
+        const allItems = [...azkarList, ...doaaList];
         
         // متغيرات التحكم
         let currentIndex = 0;
         let zikrCounter = 0;
         let sessionCounter = 0;
         let isPlaying = true;
-        let speed = 3; // ثواني
+        let speed = 3;
         let timerInterval = null;
         let countdown = speed;
         
@@ -462,47 +504,41 @@
         const playPauseText = document.getElementById('playPauseText');
         const speedText = document.getElementById('speedText');
         
-        // تحديث عرض الذكر الحالي
-        function updateZikrDisplay() {
-            const zikr = azkarList[currentIndex];
-            zikrText.textContent = zikr.text;
-            zikrTranslation.textContent = zikr.translation;
-            zikrBenefit.textContent = zikr.benefit;
+        function updateDisplay() {
+            const item = allItems[currentIndex];
+            zikrText.textContent = item.text;
+            zikrTranslation.textContent = item.translation;
+            zikrBenefit.textContent = item.benefit;
             
-            // تأثير الحركة
             const container = document.getElementById('zikrContainer');
             container.classList.remove('fade-in');
             void container.offsetWidth;
             container.classList.add('fade-in');
         }
         
-        // الانتقال للذكر التالي
-        function nextZikr() {
-            currentIndex = (currentIndex + 1) % azkarList.length;
+        function nextItem() {
+            currentIndex = (currentIndex + 1) % allItems.length;
             zikrCounter++;
             sessionCounter++;
-            updateZikrDisplay();
+            updateDisplay();
             updateCounters();
             resetTimer();
         }
         
-        // الانتقال للذكر السابق
-        function prevZikr() {
-            currentIndex = (currentIndex - 1 + azkarList.length) % azkarList.length;
+        function prevItem() {
+            currentIndex = (currentIndex - 1 + allItems.length) % allItems.length;
             zikrCounter++;
             sessionCounter++;
-            updateZikrDisplay();
+            updateDisplay();
             updateCounters();
             resetTimer();
         }
         
-        // تحديث العدادات
         function updateCounters() {
             zikrCounterSpan.textContent = zikrCounter;
             sessionCounterSpan.textContent = sessionCounter;
         }
         
-        // إعادة تعيين المؤقت
         function resetTimer() {
             countdown = speed;
             timerSecondsSpan.textContent = countdown;
@@ -510,15 +546,12 @@
             
             if (timerInterval) {
                 clearInterval(timerInterval);
-                if (isPlaying) {
-                    startTimer();
-                }
+                if (isPlaying) startTimer();
             } else if (isPlaying) {
                 startTimer();
             }
         }
         
-        // بدء المؤقت
         function startTimer() {
             if (timerInterval) clearInterval(timerInterval);
             
@@ -531,12 +564,11 @@
                 timerProgressFill.style.width = `${percent}%`;
                 
                 if (countdown <= 0) {
-                    nextZikr();
+                    nextItem();
                 }
             }, 1000);
         }
         
-        // إيقاف/تشغيل التلقائي
         function togglePlayPause() {
             isPlaying = !isPlaying;
             
@@ -554,11 +586,10 @@
             }
         }
         
-        // تغيير السرعة
         function changeSpeed() {
             const speeds = [2, 3, 4, 5, 7, 10];
-            const currentIndexSpeed = speeds.indexOf(speed);
-            const nextIndex = (currentIndexSpeed + 1) % speeds.length;
+            const currentSpeedIndex = speeds.indexOf(speed);
+            const nextIndex = (currentSpeedIndex + 1) % speeds.length;
             speed = speeds[nextIndex];
             
             speedText.textContent = `السرعة: ${speed} ثواني`;
@@ -573,29 +604,20 @@
             }
         }
         
-        // إعادة تعيين العداد الكلي
         function resetCounter() {
             zikrCounter = 0;
             sessionCounter = 0;
             updateCounters();
         }
         
-        // ربط الأحداث
-        document.getElementById('nextBtn').onclick = () => {
-            nextZikr();
-        };
-        
-        document.getElementById('prevBtn').onclick = () => {
-            prevZikr();
-        };
-        
+        document.getElementById('nextBtn').onclick = () => nextItem();
+        document.getElementById('prevBtn').onclick = () => prevItem();
         document.getElementById('playPauseBtn').onclick = togglePlayPause;
         document.getElementById('speedBtn').onclick = changeSpeed;
         document.getElementById('resetCounterBtn').onclick = resetCounter;
         
-        // تهيئة الصفحة
         function init() {
-            updateZikrDisplay();
+            updateDisplay();
             updateCounters();
             timerSecondsSpan.textContent = speed;
             timerProgressFill.style.width = '100%';
@@ -604,12 +626,10 @@
         
         init();
         
-        // حفظ العداد عند مغادرة الصفحة
         window.addEventListener('beforeunload', () => {
             localStorage.setItem('azkar_total_counter', zikrCounter);
         });
         
-        // استعادة العداد
         const savedCounter = localStorage.getItem('azkar_total_counter');
         if (savedCounter) {
             zikrCounter = parseInt(savedCounter);
