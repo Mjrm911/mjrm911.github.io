@@ -2,6 +2,7 @@
 
 <script>
 window.OneSignalDeferred = window.OneSignalDeferred || [];
+
 OneSignalDeferred.push(async function(OneSignal) {
 
   await OneSignal.init({
@@ -14,8 +15,15 @@ OneSignalDeferred.push(async function(OneSignal) {
       enable: true,
     },
 
-    allowLocalhostAsSecureOrigin: true
+    promptOptions: {
+      slidedown: {
+        enabled: true
+      }
+    }
   });
+
+  // يظهر طلب الإذن مباشرة
+  OneSignal.showSlidedownPrompt();
 
 });
 </script>
