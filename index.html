@@ -2,14 +2,22 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <title>نظام الأذكار المطور</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>أذكاري | نظام الإشعارات المباشر</title>
+    
+    <!-- خطوط جميلة -->
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- أيقونات Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- كود OneSignal -->
     <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
     <script>
       window.OneSignalDeferred = window.OneSignalDeferred || [];
       OneSignalDeferred.push(async function(OneSignal) {
         await OneSignal.init({
           appId: "e0f17c14-3a30-41e7-a55a-609b467c67ad",
-          // بما أنك على الرابط الرئيسي، نستخدم المسار المباشر
           serviceWorkerPath: "OneSignalSDKWorker.js",
           serviceWorkerParam: { scope: "/" }, 
           notifyButton: { enable: true }
@@ -17,11 +25,340 @@
         OneSignal.showSlidedownPrompt(); 
       });
     </script>
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Cairo', sans-serif;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            overflow-x: hidden;
+        }
+        
+        /* خلفية متحركة */
+        .bg-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            overflow: hidden;
+        }
+        
+        .bg-animation::before {
+            content: '';
+            position: absolute;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(56, 189, 248, 0.1) 0%, transparent 70%);
+            animation: rotate 40s linear infinite;
+        }
+        
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        
+        /* بطاقة رئيسية */
+        .hero-card {
+            position: relative;
+            z-index: 10;
+            background: rgba(15, 23, 42, 0.8);
+            backdrop-filter: blur(20px);
+            border-radius: 48px;
+            padding: 50px 40px;
+            margin: 20px;
+            text-align: center;
+            max-width: 550px;
+            width: 100%;
+            border: 1px solid rgba(56, 189, 248, 0.3);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            transition: transform 0.3s ease;
+        }
+        
+        .hero-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(56, 189, 248, 0.6);
+        }
+        
+        /* شعار */
+        .logo {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #38bdf8, #818cf8);
+            border-radius: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 25px;
+            box-shadow: 0 10px 25px -5px rgba(56, 189, 248, 0.4);
+        }
+        
+        .logo i {
+            font-size: 45px;
+            color: white;
+        }
+        
+        /* عنوان */
+        h1 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #ffffff, #94a3b8);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            margin-bottom: 15px;
+        }
+        
+        /* وصف */
+        .description {
+            color: #cbd5e1;
+            font-size: 1.1rem;
+            line-height: 1.6;
+            margin-bottom: 30px;
+        }
+        
+        /* مميزات */
+        .features {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            justify-content: center;
+            margin-bottom: 35px;
+        }
+        
+        .feature {
+            background: rgba(56, 189, 248, 0.1);
+            padding: 8px 16px;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            color: #38bdf8;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            border: 1px solid rgba(56, 189, 248, 0.3);
+        }
+        
+        .feature i {
+            font-size: 12px;
+        }
+        
+        /* زر الإشعارات */
+        .notification-btn {
+            background: linear-gradient(135deg, #38bdf8, #818cf8);
+            border: none;
+            padding: 16px 35px;
+            border-radius: 60px;
+            color: white;
+            font-family: 'Cairo', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 25px;
+            box-shadow: 0 10px 20px -5px rgba(56, 189, 248, 0.4);
+        }
+        
+        .notification-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 15px 30px -5px rgba(56, 189, 248, 0.6);
+        }
+        
+        .notification-btn i {
+            font-size: 1.2rem;
+        }
+        
+        /* حالة الإشعارات */
+        .status {
+            background: rgba(0, 0, 0, 0.4);
+            padding: 12px 20px;
+            border-radius: 50px;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 0.9rem;
+            color: #94a3b8;
+        }
+        
+        .status i {
+            font-size: 14px;
+        }
+        
+        .status.active {
+            background: rgba(34, 197, 94, 0.2);
+            color: #4ade80;
+            border: 1px solid rgba(74, 222, 128, 0.3);
+        }
+        
+        /* footer */
+        .footer {
+            margin-top: 35px;
+            font-size: 0.75rem;
+            color: #475569;
+        }
+        
+        .footer a {
+            color: #38bdf8;
+            text-decoration: none;
+        }
+        
+        /* أيقونة الجرس المخصصة */
+        .custom-bell {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: linear-gradient(135deg, #38bdf8, #818cf8);
+            width: 55px;
+            height: 55px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(56, 189, 248, 0.4);
+            transition: all 0.3s ease;
+            z-index: 100;
+        }
+        
+        .custom-bell:hover {
+            transform: scale(1.1);
+        }
+        
+        .custom-bell i {
+            font-size: 24px;
+            color: white;
+        }
+        
+        @media (max-width: 600px) {
+            .hero-card {
+                padding: 35px 25px;
+                margin: 15px;
+            }
+            h1 {
+                font-size: 1.8rem;
+            }
+            .notification-btn {
+                padding: 12px 25px;
+                font-size: 1rem;
+            }
+        }
+    </style>
 </head>
-<body style="background:#121212; color:white; text-align:center; padding-top:100px; font-family:sans-serif;">
-    <div style="border:1px solid #333; padding:20px; display:inline-block; border-radius:15px; background:#1e1e1e;">
-        <h2>✨ نظام الأذكار المباشر</h2>
-        <p>إذا لم يظهر طلب الاشتراك، يرجى الضغط على الجرس</p>
+<body>
+
+    <div class="bg-animation"></div>
+    
+    <div class="hero-card">
+        <div class="logo">
+            <i class="fas fa-mosque"></i>
+        </div>
+        
+        <h1>أذكاري</h1>
+        <p class="description">
+            نظام متطور لإرسال التنبيهات والإشعارات<br>
+            ابقَ على تواصل مع أحدث الأذكار والمناسبات
+        </p>
+        
+        <div class="features">
+            <div class="feature">
+                <i class="fas fa-bell"></i>
+                <span>إشعارات فورية</span>
+            </div>
+            <div class="feature">
+                <i class="fas fa-clock"></i>
+                <span>تحديثات يومية</span>
+            </div>
+            <div class="feature">
+                <i class="fas fa-shield-alt"></i>
+                <span>آمن وموثوق</span>
+            </div>
+        </div>
+        
+        <div class="notification-btn" id="manualSubscribeBtn">
+            <i class="fas fa-bell"></i>
+            <span>فعّل الإشعارات الآن</span>
+        </div>
+        
+        <div class="status" id="statusBadge">
+            <i class="fas fa-circle" style="font-size: 8px;"></i>
+            <span id="statusText">جاري التحميل...</span>
+        </div>
+        
+        <div class="footer">
+            <i class="fas fa-heart" style="color: #ef4444;"></i> 
+            <span>تم التطوير بواسطة نظام الأذكار المتطور</span>
+        </div>
     </div>
+    
+    <div class="custom-bell" id="bellIcon">
+        <i class="fas fa-bell"></i>
+    </div>
+    
+    <script>
+        // التحقق من حالة الإشعارات وتحديث الواجهة
+        async function updateStatus() {
+            try {
+                if (window.OneSignal) {
+                    const isSubscribed = await OneSignal.User.PushSubscription.getOptedIn();
+                    const statusBadge = document.getElementById('statusBadge');
+                    const statusText = document.getElementById('statusText');
+                    const bellIcon = document.getElementById('bellIcon');
+                    
+                    if (isSubscribed) {
+                        statusBadge.classList.add('active');
+                        statusText.innerHTML = 'الإشعارات مفعلة ✓';
+                        bellIcon.style.background = 'linear-gradient(135deg, #22c55e, #16a34a)';
+                    } else {
+                        statusBadge.classList.remove('active');
+                        statusText.innerHTML = 'الإشعارات غير مفعلة';
+                        bellIcon.style.background = 'linear-gradient(135deg, #38bdf8, #818cf8)';
+                    }
+                }
+            } catch(e) {
+                console.log('خطأ في التحقق:', e);
+            }
+        }
+        
+        // زر تفعيل يدوي
+        document.getElementById('manualSubscribeBtn').onclick = async () => {
+            try {
+                if (window.OneSignal) {
+                    await OneSignal.Notifications.requestPermission();
+                    setTimeout(updateStatus, 1000);
+                } else {
+                    alert('جاري تحميل الخدمة... حاول مرة أخرى خلال ثوانٍ');
+                }
+            } catch(e) {
+                alert('حدث خطأ: ' + e.message);
+            }
+        };
+        
+        // أيقونة الجرس الجانبية
+        document.getElementById('bellIcon').onclick = async () => {
+            try {
+                if (window.OneSignal) {
+                    await OneSignal.Notifications.requestPermission();
+                    setTimeout(updateStatus, 1000);
+                }
+            } catch(e) {}
+        };
+        
+        // تحديث الحالة كل 3 ثوانٍ
+        setInterval(updateStatus, 3000);
+        setTimeout(updateStatus, 2000);
+    </script>
 </body>
 </html>
