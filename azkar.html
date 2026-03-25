@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>أذكاري | أذكار متحركة</title>
+    
+    <!-- خطوط جميلة -->
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- أيقونات Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Cairo', sans-serif;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            overflow-x: hidden;
+        }
+        
+        /* خلفية متحركة */
+        .bg-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            overflow: hidden;
+        }
+        
+        .bg-animation::before {
+            content: '';
+            position: absolute;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(56, 189, 248, 0.1) 0%, transparent 70%);
+            animation: rotate 40s linear infinite;
+        }
+        
+        .bg-animation::after {
+            content: '';
+            position: absolute;
+            width: 150%;
+            height: 150%;
+            background: radial-gradient(circle, rgba(129, 140, 248, 0.08) 0%, transparent 60%);
+            animation: rotate 25s linear infinite reverse;
+            top: -25%;
+            left: -25%;
+        }
+        
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        
+        /* البطاقة الرئيسية */
+        .azkar-card {
+            position: relative;
+            z-index: 10;
+            background: rgba(15, 23, 42, 0.85);
+            backdrop-filter: blur(20px);
+            border-radius: 60px;
+            padding: 40px 30px;
+            margin: 20px;
+            text-align: center;
+            max-width: 550px;
+            width: 100%;
+            border: 1px solid rgba(56, 189, 248, 0.3);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            transition: all 0.3s ease;
+        }
+        
+        /* شعار */
+        .logo {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #38bdf8, #818cf8);
+            border-radius: 28px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 25px;
+            box-shadow: 0 10px 25px -5px rgba(56, 189, 248, 0.4);
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        
+        .logo i {
+            font-size: 45px;
+            color: white;
+        }
+        
+        /* عداد التسبيح */
+        .counter-section {
+            display: flex;
+            justify-content: center;
+            align-items: baseline;
+            gap: 15px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+        
+        .counter-box {
+            background: rgba(0, 0, 0, 0.4);
+            padding: 15px 25px;
+            border-radius: 50px;
+            text-align: center;
+        }
+        
+        .counter-number {
+            font-size: 2.2rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #38bdf8, #818cf8);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            display: block;
+        }
+        
+        .counter-label {
+            font-size: 0.8rem;
+            color: #94a3b8;
+        }
+        
+        /* حاوية الذكر المتحرك */
+        .zikr-container {
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 50px;
+            padding: 40px 25px;
+            margin: 20px 0;
+            border: 1px solid rgba(56, 189, 248, 0.2);
+            transition: all 0.5s ease;
+        }
+        
+        .current-zikr {
+            font-size: 1.8rem;
+            font-weight: 600;
+            color: white;
+            line-height: 1.5;
+            margin-bottom: 15px;
+            transition: all 0.3s ease;
+        }
+        
+        .zikr-translation {
+            color: #94a3b8;
+            font-size: 0.9rem;
+            border-top: 1px solid rgba(56, 189, 248, 0.2);
+            padding-top: 15px;
+            margin-top: 10px;
+        }
+        
+        .zikr-benefit {
+            color: #38bdf8;
+            font-size: 0.8rem;
+            margin-top: 10px;
+        }
+        
+        /* مؤقت التبديل */
+        .timer {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            margin: 20px 0;
+            color: #94a3b8;
+            font-size: 0.9rem;
+        }
+        
+        .timer-progress {
+            width: 100px;
+            height: 4px;
+            background: rgba(56, 189, 248, 0.3);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        
+        .timer-progress-fill {
+            height: 100%;
+            width: 100%;
+            background: linear-gradient(90deg, #38bdf8, #818cf8);
+            border-radius: 10px;
+            transition: width 1s linear;
+        }
+        
+        /* أزرار التحكم */
+        .controls {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin: 25px 0;
+            flex-wrap: wrap;
+        }
+        
+        .control-btn {
+            background: rgba(56, 189, 248, 0.1);
+            border: 1px solid rgba(56, 189, 248, 0.3);
+            padding: 12px 24px;
+            border-radius: 50px;
+            color: white;
+            font-family: 'Cairo', sans-serif;
+            font-size: 1rem;
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .control-btn:hover {
+            background: rgba(56, 189, 248, 0.2);
+            transform: scale(1.02);
+        }
+        
+        .control-btn.primary {
+            background: linear-gradient(135deg, #38bdf8, #818cf8);
+            border: none;
+        }
+        
+        .control-btn.primary:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(56, 189, 248, 0.4);
+        }
+        
+        /* زر العودة */
+        .back-link {
+            margin-top: 25px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(56, 189, 248, 0.2);
+        }
+        
+        .back-link a {
+            color: #38bdf8;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+        }
+        
+        .back-link a:hover {
+            gap: 12px;
+            color: #818cf8;
+        }
+        
+        /* footer */
+        .footer {
+            margin-top: 25px;
+            font-size: 0.7rem;
+            color: #475569;
+        }
+        
+        /* تأثيرات */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .fade-in {
+            animation: fadeInUp 0.5s ease forwards;
+        }
+        
+        @media (max-width: 600px) {
+            .azkar-card {
+                padding: 25px 20px;
+                margin: 15px;
+            }
+            .current-zikr {
+                font-size: 1.3rem;
+            }
+            .zikr-translation {
+                font-size: 0.8rem;
+            }
+            .counter-number {
+                font-size: 1.6rem;
+            }
+            .control-btn {
+                padding: 8px 18px;
+                font-size: 0.85rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="bg-animation"></div>
+    
+    <div class="azkar-card">
+        <div class="logo">
+            <i class="fas fa-mosque"></i>
+        </div>
+        
+        <h1 style="font-size:1.8rem; margin-bottom:10px; background:linear-gradient(135deg,#fff,#94a3b8); -webkit-background-clip:text; background-clip:text; color:transparent;">أذكار اليوم</h1>
+        
+        <!-- عداد التسبيح -->
+        <div class="counter-section">
+            <div class="counter-box">
+                <span class="counter-number" id="zikrCounter">0</span>
+                <span class="counter-label">عدد الأذكار</span>
+            </div>
+            <div class="counter-box">
+                <span class="counter-number" id="sessionCounter">0</span>
+                <span class="counter-label">الجلسة الحالية</span>
+            </div>
+        </div>
+        
+        <!-- حاوية الذكر المتحرك -->
+        <div class="zikr-container" id="zikrContainer">
+            <div class="current-zikr" id="zikrText">بسم الله الرحمن الرحيم</div>
+            <div class="zikr-translation" id="zikrTranslation">البدء بذكر الله</div>
+            <div class="zikr-benefit" id="zikrBenefit">🌟 فضل الذكر: طمأنينة القلب</div>
+        </div>
+        
+        <!-- مؤقت التبديل -->
+        <div class="timer">
+            <i class="fas fa-hourglass-half"></i>
+            <span>الذكر القادم بعد</span>
+            <span id="timerSeconds">3</span>
+            <span>ثواني</span>
+            <div class="timer-progress">
+                <div class="timer-progress-fill" id="timerProgress"></div>
+            </div>
+        </div>
+        
+        <!-- أزرار التحكم -->
+        <div class="controls">
+            <button class="control-btn" id="prevBtn">
+                <i class="fas fa-arrow-right"></i>
+                <span>السابق</span>
+            </button>
+            <button class="control-btn primary" id="playPauseBtn">
+                <i class="fas fa-pause" id="playPauseIcon"></i>
+                <span id="playPauseText">إيقاف مؤقت</span>
+            </button>
+            <button class="control-btn" id="nextBtn">
+                <span>التالي</span>
+                <i class="fas fa-arrow-left"></i>
+            </button>
+        </div>
+        
+        <div class="controls">
+            <button class="control-btn" id="speedBtn">
+                <i class="fas fa-tachometer-alt"></i>
+                <span id="speedText">السرعة: 3 ثواني</span>
+            </button>
+            <button class="control-btn" id="resetCounterBtn">
+                <i class="fas fa-redo-alt"></i>
+                <span>إعادة تعيين العداد</span>
+            </button>
+        </div>
+        
+        <div class="back-link">
+            <a href="index.html">
+                <i class="fas fa-arrow-right"></i>
+                <span>العودة إلى الصفحة الرئيسية</span>
+                <i class="fas fa-home"></i>
+            </a>
+        </div>
+        
+        <div class="footer">
+            <i class="fas fa-heart" style="color: #ef4444;"></i>
+            <span>اللهم اجعلنا من الذاكرين الله كثيراً</span>
+        </div>
+    </div>
+
+    <script>
+        // قائمة الأذكار (يمكنك إضافة المزيد)
+        const azkarList = [
+            {
+                text: "سُبْحَانَ اللَّهِ وَبِحَمْدِهِ",
+                translation: "سبحان الله وبحمده",
+                benefit: "فضل: من قالها مائة مرة حطت خطاياه"
+            },
+            {
+                text: "سُبْحَانَ اللَّهِ الْعَظِيمِ",
+                translation: "سبحان الله العظيم",
+                benefit: "فضل: كلمتان خفيفتان على اللسان ثقيلتان في الميزان"
+            },
+            {
+                text: "لَا إِلَٰهَ إِلَّا اللَّهُ",
+                translation: "لا إله إلا الله",
+                benefit: "فضل: أفضل الذكر"
+            },
+            {
+                text: "اللَّهُمَّ صَلِّ عَلَى مُحَمَّدٍ",
+                translation: "اللهم صل على محمد",
+                benefit: "فضل: من صلى عليَّ واحدة صلى الله عليه بها عشراً"
+            },
+            {
+                text: "أَسْتَغْفِرُ اللَّهَ وَأَتُوبُ إِلَيْهِ",
+                translation: "أستغفر الله وأتوب إليه",
+                benefit: "فضل: من لزم الاستغفار جعل الله له من كل هم فرجاً"
+            },
+            {
+                text: "حَسْبِيَ اللَّهُ لَا إِلَٰهَ إِلَّا هُوَ",
+                translation: "حسبي الله لا إله إلا هو",
+                benefit: "فضل: من قالها حين يصبح وحين يمسي كفاه الله ما أهمه"
+            },
+            {
+                text: "رَضِيتُ بِاللَّهِ رَبًّا وَبِالْإِسْلَامِ دِينًا",
+                translation: "رضيت بالله رباً وبالإسلام ديناً",
+                benefit: "فضل: من قالها حين يمسي كان حقاً على الله أن يرضيه"
+            },
+            {
+                text: "اللَّهُمَّ إِنِّي أَسْأَلُكَ الْعَفْوَ وَالْعَافِيَةَ",
+                translation: "اللهم إني أسألك العفو والعافية",
+                benefit: "فضل: دعاء جامع للدنيا والآخرة"
+            },
+            {
+                text: "لَا حَوْلَ وَلَا قُوَّةَ إِلَّا بِاللَّهِ",
+                translation: "لا حول ولا قوة إلا بالله",
+                benefit: "فضل: كنز من كنوز الجنة"
+            },
+            {
+                text: "اللَّهُمَّ أَنْتَ السَّلَامُ وَمِنْكَ السَّلَامُ",
+                translation: "اللهم أنت السلام ومنك السلام",
+                benefit: "فضل: تقال بعد الصلاة"
+            }
+        ];
+        
+        // متغيرات التحكم
+        let currentIndex = 0;
+        let zikrCounter = 0;
+        let sessionCounter = 0;
+        let isPlaying = true;
+        let speed = 3; // ثواني
+        let timerInterval = null;
+        let countdown = speed;
+        
+        // عناصر DOM
+        const zikrText = document.getElementById('zikrText');
+        const zikrTranslation = document.getElementById('zikrTranslation');
+        const zikrBenefit = document.getElementById('zikrBenefit');
+        const zikrCounterSpan = document.getElementById('zikrCounter');
+        const sessionCounterSpan = document.getElementById('sessionCounter');
+        const timerSecondsSpan = document.getElementById('timerSeconds');
+        const timerProgressFill = document.getElementById('timerProgress');
+        const playPauseIcon = document.getElementById('playPauseIcon');
+        const playPauseText = document.getElementById('playPauseText');
+        const speedText = document.getElementById('speedText');
+        
+        // تحديث عرض الذكر الحالي
+        function updateZikrDisplay() {
+            const zikr = azkarList[currentIndex];
+            zikrText.textContent = zikr.text;
+            zikrTranslation.textContent = zikr.translation;
+            zikrBenefit.textContent = `🌟 ${zikr.benefit}`;
+            
+            // تأثير الحركة
+            const container = document.getElementById('zikrContainer');
+            container.classList.remove('fade-in');
+            void container.offsetWidth; // إعادة تعيين الأنيميشن
+            container.classList.add('fade-in');
+        }
+        
+        // الانتقال للذكر التالي
+        function nextZikr() {
+            currentIndex = (currentIndex + 1) % azkarList.length;
+            zikrCounter++;
+            sessionCounter++;
+            updateZikrDisplay();
+            updateCounters();
+            resetTimer();
+        }
+        
+        // الانتقال للذكر السابق
+        function prevZikr() {
+            currentIndex = (currentIndex - 1 + azkarList.length) % azkarList.length;
+            zikrCounter++;
+            sessionCounter++;
+            updateZikrDisplay();
+            updateCounters();
+            resetTimer();
+        }
+        
+        // تحديث العدادات
+        function updateCounters() {
+            zikrCounterSpan.textContent = zikrCounter;
+            sessionCounterSpan.textContent = sessionCounter;
+        }
+        
+        // إعادة تعيين عداد الجلسة
+        function resetSessionCounter() {
+            sessionCounter = 0;
+            sessionCounterSpan.textContent = sessionCounter;
+        }
+        
+        // إعادة تعيين المؤقت
+        function resetTimer() {
+            countdown = speed;
+            timerSecondsSpan.textContent = countdown;
+            timerProgressFill.style.width = '100%';
+            
+            if (timerInterval) {
+                clearInterval(timerInterval);
+                if (isPlaying) {
+                    startTimer();
+                }
+            } else if (isPlaying) {
+                startTimer();
+            }
+        }
+        
+        // بدء المؤقت
+        function startTimer() {
+            if (timerInterval) clearInterval(timerInterval);
+            
+            timerInterval = setInterval(() => {
+                if (!isPlaying) return;
+                
+                countdown--;
+                timerSecondsSpan.textContent = countdown;
+                const percent = (countdown / speed) * 100;
+                timerProgressFill.style.width = `${percent}%`;
+                
+                if (countdown <= 0) {
+                    nextZikr();
+                }
+            }, 1000);
+        }
+        
+        // إيقاف/تشغيل التلقائي
+        function togglePlayPause() {
+            isPlaying = !isPlaying;
+            
+            if (isPlaying) {
+                startTimer();
+                playPauseIcon.className = 'fas fa-pause';
+                playPauseText.textContent = 'إيقاف مؤقت';
+            } else {
+                if (timerInterval) {
+                    clearInterval(timerInterval);
+                    timerInterval = null;
+                }
+                playPauseIcon.className = 'fas fa-play';
+                playPauseText.textContent = 'تشغيل تلقائي';
+            }
+        }
+        
+        // تغيير السرعة
+        function changeSpeed() {
+            const speeds = [2, 3, 4, 5, 7, 10];
+            const currentIndexSpeed = speeds.indexOf(speed);
+            const nextIndex = (currentIndexSpeed + 1) % speeds.length;
+            speed = speeds[nextIndex];
+            
+            speedText.textContent = `السرعة: ${speed} ثواني`;
+            timerSecondsSpan.textContent = speed;
+            
+            // إعادة ضبط المؤقت بالسرعة الجديدة
+            if (isPlaying) {
+                resetTimer();
+            } else {
+                countdown = speed;
+                timerSecondsSpan.textContent = speed;
+                timerProgressFill.style.width = '100%';
+            }
+        }
+        
+        // إعادة تعيين العداد الكلي
+        function resetCounter() {
+            zikrCounter = 0;
+            sessionCounter = 0;
+            updateCounters();
+        }
+        
+        // ربط الأحداث
+        document.getElementById('nextBtn').onclick = () => {
+            if (!isPlaying) {
+                nextZikr();
+            } else {
+                nextZikr();
+            }
+        };
+        
+        document.getElementById('prevBtn').onclick = () => {
+            if (!isPlaying) {
+                prevZikr();
+            } else {
+                prevZikr();
+            }
+        };
+        
+        document.getElementById('playPauseBtn').onclick = togglePlayPause;
+        document.getElementById('speedBtn').onclick = changeSpeed;
+        document.getElementById('resetCounterBtn').onclick = resetCounter;
+        
+        // تهيئة الصفحة
+        function init() {
+            updateZikrDisplay();
+            updateCounters();
+            timerSecondsSpan.textContent = speed;
+            timerProgressFill.style.width = '100%';
+            startTimer();
+        }
+        
+        init();
+        
+        // حفظ العداد عند مغادرة الصفحة (اختياري)
+        window.addEventListener('beforeunload', () => {
+            localStorage.setItem('azkar_total_counter', zikrCounter);
+        });
+        
+        // استعادة العداد (اختياري)
+        const savedCounter = localStorage.getItem('azkar_total_counter');
+        if (savedCounter) {
+            zikrCounter = parseInt(savedCounter);
+            updateCounters();
+        }
+    </script>
+</body>
+</html>
