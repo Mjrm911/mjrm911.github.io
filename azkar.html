@@ -5,19 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>أذكاري | أذكار متحركة</title>
     
-    <!-- خطوط جميلة -->
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    
-    <!-- أيقونات Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
             font-family: 'Cairo', sans-serif;
             background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%);
@@ -28,7 +20,6 @@
             position: relative;
             overflow-x: hidden;
         }
-        
         .bg-animation {
             position: fixed;
             top: 0;
@@ -38,7 +29,6 @@
             z-index: 0;
             overflow: hidden;
         }
-        
         .bg-animation::before {
             content: '';
             position: absolute;
@@ -47,7 +37,6 @@
             background: radial-gradient(circle, rgba(56, 189, 248, 0.1) 0%, transparent 70%);
             animation: rotate 40s linear infinite;
         }
-        
         .bg-animation::after {
             content: '';
             position: absolute;
@@ -58,12 +47,10 @@
             top: -25%;
             left: -25%;
         }
-        
         @keyframes rotate {
             from { transform: rotate(0deg); }
             to { transform: rotate(360deg); }
         }
-        
         .azkar-card {
             position: relative;
             z-index: 10;
@@ -79,7 +66,6 @@
             box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
             transition: all 0.3s ease;
         }
-        
         .logo {
             width: 80px;
             height: 80px;
@@ -92,17 +78,11 @@
             box-shadow: 0 10px 25px -5px rgba(56, 189, 248, 0.4);
             animation: pulse 2s infinite;
         }
-        
         @keyframes pulse {
             0%, 100% { transform: scale(1); }
             50% { transform: scale(1.05); }
         }
-        
-        .logo i {
-            font-size: 45px;
-            color: white;
-        }
-        
+        .logo i { font-size: 45px; color: white; }
         .counter-section {
             display: flex;
             justify-content: center;
@@ -111,14 +91,12 @@
             margin-bottom: 30px;
             flex-wrap: wrap;
         }
-        
         .counter-box {
             background: rgba(0, 0, 0, 0.4);
             padding: 15px 25px;
             border-radius: 50px;
             text-align: center;
         }
-        
         .counter-number {
             font-size: 2.2rem;
             font-weight: 800;
@@ -128,12 +106,7 @@
             color: transparent;
             display: block;
         }
-        
-        .counter-label {
-            font-size: 0.8rem;
-            color: #94a3b8;
-        }
-        
+        .counter-label { font-size: 0.8rem; color: #94a3b8; }
         .zikr-container {
             background: rgba(0, 0, 0, 0.5);
             border-radius: 50px;
@@ -142,16 +115,13 @@
             border: 1px solid rgba(56, 189, 248, 0.2);
             transition: all 0.5s ease;
         }
-        
         .current-zikr {
             font-size: 1.8rem;
             font-weight: 600;
             color: white;
             line-height: 1.5;
             margin-bottom: 15px;
-            transition: all 0.3s ease;
         }
-        
         .zikr-translation {
             color: #94a3b8;
             font-size: 0.9rem;
@@ -159,13 +129,11 @@
             padding-top: 15px;
             margin-top: 10px;
         }
-        
         .zikr-benefit {
             color: #38bdf8;
             font-size: 0.8rem;
             margin-top: 10px;
         }
-        
         .timer {
             display: flex;
             align-items: center;
@@ -175,7 +143,6 @@
             color: #94a3b8;
             font-size: 0.9rem;
         }
-        
         .timer-progress {
             width: 100px;
             height: 4px;
@@ -183,7 +150,6 @@
             border-radius: 10px;
             overflow: hidden;
         }
-        
         .timer-progress-fill {
             height: 100%;
             width: 100%;
@@ -191,7 +157,6 @@
             border-radius: 10px;
             transition: width 1s linear;
         }
-        
         .controls {
             display: flex;
             gap: 15px;
@@ -199,7 +164,6 @@
             margin: 25px 0;
             flex-wrap: wrap;
         }
-        
         .control-btn {
             background: rgba(56, 189, 248, 0.1);
             border: 1px solid rgba(56, 189, 248, 0.3);
@@ -215,28 +179,23 @@
             cursor: pointer;
             transition: all 0.3s ease;
         }
-        
         .control-btn:hover {
             background: rgba(56, 189, 248, 0.2);
             transform: scale(1.02);
         }
-        
         .control-btn.primary {
             background: linear-gradient(135deg, #38bdf8, #818cf8);
             border: none;
         }
-        
         .control-btn.primary:hover {
             transform: scale(1.05);
             box-shadow: 0 5px 15px rgba(56, 189, 248, 0.4);
         }
-        
         .back-link {
             margin-top: 25px;
             padding-top: 20px;
             border-top: 1px solid rgba(56, 189, 248, 0.2);
         }
-        
         .back-link a {
             color: #38bdf8;
             text-decoration: none;
@@ -246,51 +205,49 @@
             font-size: 0.9rem;
             transition: all 0.3s ease;
         }
-        
-        .back-link a:hover {
-            gap: 12px;
-            color: #818cf8;
-        }
-        
+        .back-link a:hover { gap: 12px; color: #818cf8; }
         .footer {
             margin-top: 25px;
             font-size: 0.7rem;
             color: #475569;
         }
-        
         @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
-        
-        .fade-in {
-            animation: fadeInUp 0.5s ease forwards;
-        }
-        
+        .fade-in { animation: fadeInUp 0.5s ease forwards; }
         @media (max-width: 600px) {
-            .azkar-card {
-                padding: 25px 20px;
-                margin: 15px;
-            }
-            .current-zikr {
-                font-size: 1.3rem;
-            }
-            .zikr-translation {
-                font-size: 0.8rem;
-            }
-            .counter-number {
-                font-size: 1.6rem;
-            }
-            .control-btn {
-                padding: 8px 18px;
-                font-size: 0.85rem;
-            }
+            .azkar-card { padding: 25px 20px; margin: 15px; }
+            .current-zikr { font-size: 1.3rem; }
+            .zikr-translation { font-size: 0.8rem; }
+            .counter-number { font-size: 1.6rem; }
+            .control-btn { padding: 8px 18px; font-size: 0.85rem; }
+        }
+        
+        /* زر MP3 المخصص */
+        .mp3-btn {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            z-index: 1000;
+            background: rgba(56, 189, 248, 0.15);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(56, 189, 248, 0.3);
+            padding: 12px 18px;
+            border-radius: 50px;
+            color: white;
+            font-family: 'Cairo', sans-serif;
+            font-size: 1rem;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .mp3-btn:hover {
+            background: rgba(56, 189, 248, 0.25);
+            transform: scale(1.02);
         }
     </style>
 </head>
@@ -299,9 +256,7 @@
     <div class="bg-animation"></div>
     
     <div class="azkar-card">
-        <div class="logo">
-            <i class="fas fa-mosque"></i>
-        </div>
+        <div class="logo"><i class="fas fa-mosque"></i></div>
         
         <h1 style="font-size:1.8rem; margin-bottom:10px; background:linear-gradient(135deg,#fff,#94a3b8); -webkit-background-clip:text; background-clip:text; color:transparent;">أذكار اليوم</h1>
         
@@ -333,37 +288,18 @@
         </div>
         
         <div class="controls">
-            <button class="control-btn" id="prevBtn">
-                <i class="fas fa-arrow-right"></i>
-                <span>السابق</span>
-            </button>
-            <button class="control-btn primary" id="playPauseBtn">
-                <i class="fas fa-pause" id="playPauseIcon"></i>
-                <span id="playPauseText">إيقاف مؤقت</span>
-            </button>
-            <button class="control-btn" id="nextBtn">
-                <span>التالي</span>
-                <i class="fas fa-arrow-left"></i>
-            </button>
+            <button class="control-btn" id="prevBtn"><i class="fas fa-arrow-right"></i><span>السابق</span></button>
+            <button class="control-btn primary" id="playPauseBtn"><i class="fas fa-pause" id="playPauseIcon"></i><span id="playPauseText">إيقاف مؤقت</span></button>
+            <button class="control-btn" id="nextBtn"><span>التالي</span><i class="fas fa-arrow-left"></i></button>
         </div>
         
         <div class="controls">
-            <button class="control-btn" id="speedBtn">
-                <i class="fas fa-tachometer-alt"></i>
-                <span id="speedText">السرعة: 3 ثواني</span>
-            </button>
-            <button class="control-btn" id="resetCounterBtn">
-                <i class="fas fa-redo-alt"></i>
-                <span>إعادة تعيين العداد</span>
-            </button>
+            <button class="control-btn" id="speedBtn"><i class="fas fa-tachometer-alt"></i><span id="speedText">السرعة: 3 ثواني</span></button>
+            <button class="control-btn" id="resetCounterBtn"><i class="fas fa-redo-alt"></i><span>إعادة تعيين العداد</span></button>
         </div>
         
         <div class="back-link">
-            <a href="index.html">
-                <i class="fas fa-arrow-right"></i>
-                <span>العودة إلى الصفحة الرئيسية</span>
-                <i class="fas fa-home"></i>
-            </a>
+            <a href="index.html"><i class="fas fa-arrow-right"></i><span>العودة إلى الصفحة الرئيسية</span><i class="fas fa-home"></i></a>
         </div>
         
         <div class="footer">
@@ -372,8 +308,18 @@
         </div>
     </div>
 
+    <!-- زر MP3 في الزاوية -->
+    <div class="mp3-btn" id="mp3Btn">
+        <i id="mp3Icon" class="fas fa-play"></i>
+        <span id="mp3Text">تشغيل</span>
+    </div>
+
+    <audio id="mp3Audio" loop preload="auto">
+        <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
+    </audio>
+
     <script>
-        // ==================== 50 ذكرًا صحيحًا ====================
+        // ==================== قوائم الأذكار والأدعية ====================
         const azkarList = [
             { text: "سُبْحَانَ اللَّهِ وَبِحَمْدِهِ", translation: "سبحان الله وبحمده", benefit: "فضل: من قالها مائة مرة حطت خطاياه" },
             { text: "سُبْحَانَ اللَّهِ الْعَظِيمِ", translation: "سبحان الله العظيم", benefit: "فضل: كلمتان خفيفتان على اللسان ثقيلتان في الميزان" },
@@ -426,7 +372,6 @@
             { text: "اللَّهُمَّ اجْعَلْ خَيْرَ عُمُرِي آخِرَهُ", translation: "اللهم اجعل خير عمري آخره", benefit: "فضل: دعاء الختام" }
         ];
 
-        // ==================== 50 دعاءً قصيرًا ====================
         const doaaList = [
             { text: "رَبَّنَا آتِنَا فِي الدُّنْيَا حَسَنَةً وَفِي الْآخِرَةِ حَسَنَةً وَقِنَا عَذَابَ النَّارِ", translation: "ربنا آتنا في الدنيا حسنة وفي الآخرة حسنة وقنا عذاب النار", benefit: "دعاء جامع" },
             { text: "رَبَّنَا لَا تُزِغْ قُلُوبَنَا بَعْدَ إِذْ هَدَيْتَنَا", translation: "ربنا لا تزغ قلوبنا بعد إذ هديتنا", benefit: "دعاء الثبات" },
@@ -434,207 +379,4 @@
             { text: "رَبَّنَا هَبْ لَنَا مِنْ أَزْوَاجِنَا وَذُرِّيَّاتِنَا قُرَّةَ أَعْيُنٍ", translation: "ربنا هب لنا من أزواجنا وذرياتنا قرة أعين", benefit: "دعاء الأسرة" },
             { text: "رَبَّنَا اجْعَلْنَا مُسْلِمَيْنِ لَكَ وَمِنْ ذُرِّيَّتِنَا أُمَّةً مُسْلِمَةً", translation: "ربنا اجعلنا مسلمين لك ومن ذريتنا أمة مسلمة", benefit: "دعاء الإسلام" },
             { text: "رَبَّنَا تَقَبَّلْ مِنَّا إِنَّكَ أَنْتَ السَّمِيعُ الْعَلِيمُ", translation: "ربنا تقبل منا إنك أنت السميع العليم", benefit: "دعاء القبول" },
-            { text: "رَبَّنَا اصْرِفْ عَنَّا عَذَابَ جَهَنَّمَ إِنَّ عَذَابَهَا كَانَ غَرَامًا", translation: "ربنا اصرف عنا عذاب جهنم", benefit: "دعاء النجاة" },
-            { text: "رَبِّ اشْرَحْ لِي صَدْرِي وَيَسِّرْ لِي أَمْرِي", translation: "رب اشرح لي صدري ويسر لي أمري", benefit: "دعاء موسى عليه السلام" },
-            { text: "رَبِّ أَوْزِعْنِي أَنْ أَشْكُرَ نِعْمَتَكَ الَّتِي أَنْعَمْتَ عَلَيَّ", translation: "رب أوزعني أن أشكر نعمتك", benefit: "دعاء الشكر" },
-            { text: "رَبِّ هَبْ لِي حُكْمًا وَأَلْحِقْنِي بِالصَّالِحِينَ", translation: "رب هب لي حكماً وألحقني بالصالحين", benefit: "دعاء الحكمة" },
-            { text: "اللَّهُمَّ أَنْتَ رَبِّي لَا إِلَهَ إِلَّا أَنْتَ خَلَقْتَنِي وَأَنَا عَبْدُكَ", translation: "اللهم أنت ربي لا إله إلا أنت خلقتني وأنا عبدك", benefit: "سيد الاستغفار" },
-            { text: "اللَّهُمَّ إِنِّي أَسْأَلُكَ بِأَنَّ لَكَ الْحَمْدَ لَا إِلَهَ إِلَّا أَنْتَ", translation: "اللهم إني أسألك بأن لك الحمد لا إله إلا أنت", benefit: "دعاء عظيم" },
-            { text: "اللَّهُمَّ إِنِّي أَسْأَلُكَ بِأَنِّي أَشْهَدُ أَنَّكَ أَنْتَ اللَّهُ لَا إِلَهَ إِلَّا أَنْتَ", translation: "اللهم إني أسألك بأني أشهد أنك أنت الله لا إله إلا أنت", benefit: "دعاء مستجاب" },
-            { text: "اللَّهُمَّ إِنِّي أَسْأَلُكَ مِنْ خَيْرِ مَا سَأَلَكَ عَبْدُكَ وَنَبِيُّكَ", translation: "اللهم إني أسألك من خير ما سألك عبدك ونبيك", benefit: "دعاء جامع" },
-            { text: "اللَّهُمَّ إِنِّي أَعُوذُ بِكَ مِنْ شَرِّ مَا عَمِلْتُ وَمِنْ شَرِّ مَا لَمْ أَعْمَلْ", translation: "اللهم إني أعوذ بك من شر ما عملت ومن شر ما لم أعمل", benefit: "دعاء الوقاية" },
-            { text: "اللَّهُمَّ إِنِّي أَعُوذُ بِكَ مِنْ زَوَالِ نِعْمَتِكَ وَتَحَوُّلِ عَافِيَتِكَ", translation: "اللهم إني أعوذ بك من زوال نعمتك وتحول عافيتك", benefit: "دعاء الخوف" },
-            { text: "اللَّهُمَّ إِنِّي أَعُوذُ بِكَ مِنَ الْكُفْرِ وَالْفَقْرِ", translation: "اللهم إني أعوذ بك من الكفر والفقر", benefit: "دعاء الغنى" },
-            { text: "اللَّهُمَّ إِنِّي أَعُوذُ بِكَ مِنْ عَذَابِ الْقَبْرِ", translation: "اللهم إني أعوذ بك من عذاب القبر", benefit: "دعاء القبر" },
-            { text: "اللَّهُمَّ إِنِّي أَعُوذُ بِكَ مِنْ فِتْنَةِ الْمَحْيَا وَالْمَمَاتِ", translation: "اللهم إني أعوذ بك من فتنة المحيا والممات", benefit: "دعاء الفتن" },
-            { text: "اللَّهُمَّ إِنِّي أَعُوذُ بِكَ مِنْ شَرِّ مَا خَلَقْتَ", translation: "اللهم إني أعوذ بك من شر ما خلقت", benefit: "دعاء عام" },
-            { text: "اللَّهُمَّ اجْعَلْنِي مِنْ أَهْلِ الْجَنَّةِ بِغَيْرِ حِسَابٍ", translation: "اللهم اجعلني من أهل الجنة بغير حساب", benefit: "دعاء الجنة" },
-            { text: "اللَّهُمَّ إِنِّي أَسْأَلُكَ الْفِرْدَوْسَ الْأَعْلَى", translation: "اللهم إني أسألك الفردوس الأعلى", benefit: "دعاء أعلى الجنة" },
-            { text: "اللَّهُمَّ إِنِّي أَسْأَلُكَ نَعِيمًا لَا يَنْقَطِعُ", translation: "اللهم إني أسألك نعيماً لا ينقطع", benefit: "دعاء النعيم الدائم" },
-            { text: "اللَّهُمَّ إِنِّي أَسْأَلُكَ الْعَيْشَ السَّعِيدَ", translation: "اللهم إني أسألك العيش السعيد", benefit: "دعاء السعادة" },
-            { text: "اللَّهُمَّ إِنِّي أَسْأَلُكَ الصِّحَّةَ وَالْعَافِيَةَ", translation: "اللهم إني أسألك الصحة والعافية", benefit: "دعاء الصحة" },
-            { text: "اللَّهُمَّ إِنِّي أَسْأَلُكَ الْغِنَى وَالْعِزَّ", translation: "اللهم إني أسألك الغنى والعز", benefit: "دعاء العزة" },
-            { text: "اللَّهُمَّ إِنِّي أَسْأَلُكَ الْبَرَكَةَ فِي الْعُمْرِ", translation: "اللهم إني أسألك البركة في العمر", benefit: "دعاء البركة" },
-            { text: "اللَّهُمَّ إِنِّي أَسْأَلُكَ حُسْنَ الْخُلُقِ", translation: "اللهم إني أسألك حسن الخلق", benefit: "دعاء الأخلاق" },
-            { text: "اللَّهُمَّ إِنِّي أَسْأَلُكَ الرِّزْقَ الْوَاسِعَ", translation: "اللهم إني أسألك الرزق الواسع", benefit: "دعاء الرزق" },
-            { text: "اللَّهُمَّ إِنِّي أَسْأَلُكَ الْيُسْرَ بَعْدَ الْعُسْرِ", translation: "اللهم إني أسألك اليسر بعد العسر", benefit: "دعاء التيسير" },
-            { text: "اللَّهُمَّ إِنِّي أَسْأَلُكَ الرَّاحَةَ عِنْدَ الْمَوْتِ", translation: "اللهم إني أسألك الراحة عند الموت", benefit: "دعاء سكرات الموت" },
-            { text: "اللَّهُمَّ إِنِّي أَسْأَلُكَ النَّظَرَ إِلَى وَجْهِكَ الْكَرِيمِ", translation: "اللهم إني أسألك النظر إلى وجهك الكريم", benefit: "دعاء رؤية الله" },
-            { text: "اللَّهُمَّ إِنِّي أَسْأَلُكَ شَفَاعَةَ النَّبِيِّ مُحَمَّدٍ", translation: "اللهم إني أسألك شفاعة النبي محمد", benefit: "دعاء الشفاعة" },
-            { text: "اللَّهُمَّ إِنِّي أَسْأَلُكَ الْوَلَايَةَ فِي الدِّينِ", translation: "اللهم إني أسألك الولاية في الدين", benefit: "دعاء التمسك بالدين" },
-            { text: "اللَّهُمَّ إِنِّي أَسْأَلُكَ الصِّدْقَ فِي الْحَدِيثِ", translation: "اللهم إني أسألك الصدق في الحديث", benefit: "دعاء الصدق" },
-            { text: "اللَّهُمَّ إِنِّي أَسْأَلُكَ الْأَمَانَةَ فِي الْمُعَامَلَةِ", translation: "اللهم إني أسألك الأمانة في المعاملة", benefit: "دعاء الأمانة" },
-            { text: "اللَّهُمَّ إِنِّي أَسْأَلُكَ الْوَفَاءَ بِالْعَهْدِ", translation: "اللهم إني أسألك الوفاء بالعهد", benefit: "دعاء الوفاء" },
-            { text: "اللَّهُمَّ إِنِّي أَسْأَلُكَ الرِّفْقَ فِي الْأَمْرِ", translation: "اللهم إني أسألك الرفق في الأمر", benefit: "دعاء الرفق" },
-            { text: "اللَّهُمَّ إِنِّي أَسْأَلُكَ الْحِلْمَ عِنْدَ الْغَضَبِ", translation: "اللهم إني أسألك الحلم عند الغضب", benefit: "دعاء الحلم" },
-            { text: "اللَّهُمَّ إِنِّي أَسْأَلُكَ الصَّبْرَ عَلَى الْبَلَاءِ", translation: "اللهم إني أسألك الصبر على البلاء", benefit: "دعاء الصبر" },
-            { text: "اللَّهُمَّ إِنِّي أَسْأَلُكَ الرِّضَا بِالْقَضَاءِ", translation: "اللهم إني أسألك الرضا بالقضاء", benefit: "دعاء الرضا" },
-            { text: "اللَّهُمَّ إِنِّي أَسْأَلُكَ التَّوْبَةَ قَبْلَ الْمَوْتِ", translation: "اللهم إني أسألك التوبة قبل الموت", benefit: "دعاء التوبة" },
-            { text: "اللَّهُمَّ إِنِّي أَسْأَلُكَ الْمَغْفِرَةَ بَعْدَ الْمَوْتِ", translation: "اللهم إني أسألك المغفرة بعد الموت", benefit: "دعاء المغفرة" },
-            { text: "اللَّهُمَّ إِنِّي أَسْأَلُكَ الْجَنَّةَ مَعَ الْأَبْرَارِ", translation: "اللهم إني أسألك الجنة مع الأبرار", benefit: "دعاء الرفقة الصالحة" },
-            { text: "اللَّهُمَّ إِنِّي أَسْأَلُكَ الْعَفْوَ عِنْدَ الْحِسَابِ", translation: "اللهم إني أسألك العفو عند الحساب", benefit: "دعاء الحساب" },
-            { text: "اللَّهُمَّ إِنِّي أَسْأَلُكَ النَّجَاةَ مِنَ النَّارِ", translation: "اللهم إني أسألك النجاة من النار", benefit: "دعاء النجاة" },
-            { text: "اللَّهُمَّ إِنِّي أَسْأَلُكَ الْفَوْزَ بِالْجَنَّةِ", translation: "اللهم إني أسألك الفوز بالجنة", benefit: "دعاء الفوز" },
-            { text: "اللَّهُمَّ إِنِّي أَسْأَلُكَ رِضَاكَ وَالْجَنَّةَ", translation: "اللهم إني أسألك رضاك والجنة", benefit: "دعاء الرضوان" },
-            { text: "اللَّهُمَّ إِنِّي أَسْأَلُكَ الْعَافِيَةَ فِي الدَّارَيْنِ", translation: "اللهم إني أسألك العافية في الدارين", benefit: "دعاء العافية في الدنيا والآخرة" },
-            { text: "اللَّهُمَّ إِنِّي أَسْأَلُكَ خَيْرَ الدُّنْيَا وَالْآخِرَةِ", translation: "اللهم إني أسألك خير الدنيا والآخرة", benefit: "دعاء الخير كله" }
-        ];
-
-        // دمج القائمتين: 50 ذكرًا ثم 50 دعاءً
-        const allItems = [...azkarList, ...doaaList];
-        
-        // متغيرات التحكم
-        let currentIndex = 0;
-        let zikrCounter = 0;
-        let sessionCounter = 0;
-        let isPlaying = true;
-        let speed = 3;
-        let timerInterval = null;
-        let countdown = speed;
-        
-        // عناصر DOM
-        const zikrText = document.getElementById('zikrText');
-        const zikrTranslation = document.getElementById('zikrTranslation');
-        const zikrBenefit = document.getElementById('zikrBenefit');
-        const zikrCounterSpan = document.getElementById('zikrCounter');
-        const sessionCounterSpan = document.getElementById('sessionCounter');
-        const timerSecondsSpan = document.getElementById('timerSeconds');
-        const timerProgressFill = document.getElementById('timerProgress');
-        const playPauseIcon = document.getElementById('playPauseIcon');
-        const playPauseText = document.getElementById('playPauseText');
-        const speedText = document.getElementById('speedText');
-        
-        function updateDisplay() {
-            const item = allItems[currentIndex];
-            zikrText.textContent = item.text;
-            zikrTranslation.textContent = item.translation;
-            zikrBenefit.textContent = item.benefit;
-            
-            const container = document.getElementById('zikrContainer');
-            container.classList.remove('fade-in');
-            void container.offsetWidth;
-            container.classList.add('fade-in');
-        }
-        
-        function nextItem() {
-            currentIndex = (currentIndex + 1) % allItems.length;
-            zikrCounter++;
-            sessionCounter++;
-            updateDisplay();
-            updateCounters();
-            resetTimer();
-        }
-        
-        function prevItem() {
-            currentIndex = (currentIndex - 1 + allItems.length) % allItems.length;
-            zikrCounter++;
-            sessionCounter++;
-            updateDisplay();
-            updateCounters();
-            resetTimer();
-        }
-        
-        function updateCounters() {
-            zikrCounterSpan.textContent = zikrCounter;
-            sessionCounterSpan.textContent = sessionCounter;
-        }
-        
-        function resetTimer() {
-            countdown = speed;
-            timerSecondsSpan.textContent = countdown;
-            timerProgressFill.style.width = '100%';
-            
-            if (timerInterval) {
-                clearInterval(timerInterval);
-                if (isPlaying) startTimer();
-            } else if (isPlaying) {
-                startTimer();
-            }
-        }
-        
-        function startTimer() {
-            if (timerInterval) clearInterval(timerInterval);
-            
-            timerInterval = setInterval(() => {
-                if (!isPlaying) return;
-                
-                countdown--;
-                timerSecondsSpan.textContent = countdown;
-                const percent = (countdown / speed) * 100;
-                timerProgressFill.style.width = `${percent}%`;
-                
-                if (countdown <= 0) {
-                    nextItem();
-                }
-            }, 1000);
-        }
-        
-        function togglePlayPause() {
-            isPlaying = !isPlaying;
-            
-            if (isPlaying) {
-                startTimer();
-                playPauseIcon.className = 'fas fa-pause';
-                playPauseText.textContent = 'إيقاف مؤقت';
-            } else {
-                if (timerInterval) {
-                    clearInterval(timerInterval);
-                    timerInterval = null;
-                }
-                playPauseIcon.className = 'fas fa-play';
-                playPauseText.textContent = 'تشغيل تلقائي';
-            }
-        }
-        
-        function changeSpeed() {
-            const speeds = [2, 3, 4, 5, 7, 10];
-            const currentSpeedIndex = speeds.indexOf(speed);
-            const nextIndex = (currentSpeedIndex + 1) % speeds.length;
-            speed = speeds[nextIndex];
-            
-            speedText.textContent = `السرعة: ${speed} ثواني`;
-            timerSecondsSpan.textContent = speed;
-            
-            if (isPlaying) {
-                resetTimer();
-            } else {
-                countdown = speed;
-                timerSecondsSpan.textContent = speed;
-                timerProgressFill.style.width = '100%';
-            }
-        }
-        
-        function resetCounter() {
-            zikrCounter = 0;
-            sessionCounter = 0;
-            updateCounters();
-        }
-        
-        document.getElementById('nextBtn').onclick = () => nextItem();
-        document.getElementById('prevBtn').onclick = () => prevItem();
-        document.getElementById('playPauseBtn').onclick = togglePlayPause;
-        document.getElementById('speedBtn').onclick = changeSpeed;
-        document.getElementById('resetCounterBtn').onclick = resetCounter;
-        
-        function init() {
-            updateDisplay();
-            updateCounters();
-            timerSecondsSpan.textContent = speed;
-            timerProgressFill.style.width = '100%';
-            startTimer();
-        }
-        
-        init();
-        
-        window.addEventListener('beforeunload', () => {
-            localStorage.setItem('azkar_total_counter', zikrCounter);
-        });
-        
-        const savedCounter = localStorage.getItem('azkar_total_counter');
-        if (savedCounter) {
-            zikrCounter = parseInt(savedCounter);
-            updateCounters();
-        }
-    </script>
-</body>
-</html>
+            { text: "رَبَّنَا اصْرِفْ عَنَّا عَذَابَ جَهَنَّمَ إِنَّ عَذَابَهَا كَانَ غَرَامًا", translation: "ربنا اصرف عنا عذاب جهنم إن عذابها
