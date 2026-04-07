@@ -514,37 +514,74 @@
             updateCounters();
         }
         
-        // ==================== مشغل MP3 ====================
-        const mp3Audio = document.getElementById('bgMp3');
-        const mp3Btn = document.getElementById('mp3Btn');
-        const mp3Icon = document.getElementById('mp3Icon');
-        const mp3Text = document.getElementById('mp3Text');
-        
-        let isMp3Playing = false;
-        
-        function tryAutoPlayMp3() {
-            mp3Audio.play().then(() => {
-                isMp3Playing = true;
-                mp3Icon.className = 'fas fa-pause';
-                mp3Text.textContent = 'إيقاف';
-            }).catch(() => {
-                console.log('التشغيل التلقائي غير مسموح');
-                isMp3Playing = false;
-                mp3Icon.className = 'fas fa-play';
-                mp3Text.textContent = 'تشغيل';
-            });
-        }
-        
-        mp3Btn.onclick = (e) => {
-            e.stopPropagation();
-            if (isMp3Playing) {
-                mp3Audio.pause();
-                mp3Icon.className = 'fas fa-play';
-                mp3Text.textContent = 'تشغيل';
-            } else {
-                mp3Audio.play().then(() => {
-                    mp3Icon.className = 'fas fa-pause';
-                    mp3Text.textContent = 'إيقاف';
+        updateCounters();
+
+// ==================== مشغل MP3 ====================
+const mp3Audio = document.getElementById('bgMp3');
+const mp3Btn = document.getElementById('mp3Btn');
+const mp3Icon = document.getElementById('mp3Icon');
+const mp3Text = document.getElementById('mp3Text');
+
+let isMp3Playing = false;
+
+function tryAutoPlayMp3() {
+    mp3Audio.play().then(() => {
+        isMp3Playing = true;
+        mp3Icon.className = 'fas fa-pause';
+        mp3Text.textContent = 'إيقاف';
+    }).catch(() => {
+        console.log('التشغيل التلقائي غير مسموح');
+        isMp3Playing = false;
+        mp3Icon.className = 'fas fa-play';
+        mp3Text.textContent = 'تشغيل سورة الكهف';
+    });
+}
+
+mp3Btn.onclick = (e) => {
+    e.stopPropagation();
+    if (isMp3Playing) {
+        mp3Audio.pause();
+        mp3Icon.className = 'fas fa-play';
+        mp3Text.textContent = 'تشغيل سورة الكهف';
+    } else {
+        mp3Audio.play().then(() => {
+            mp3Icon.className = 'fas fa-pause';
+            mp3Text.textContent = 'إيقاف';
+        }).catch(e => {
+            alert('حدث خطأ: ' + e.message);
+        });
+    }
+    isMp3Playing = !isMp3Playing;
+};
+
+tryAutoPlayMp3();
+
+// ربط الأزرار
+document.getElementById('nextBtn').onclick = () => nextItem();
+document.getElementById('prevBtn').onclick = () => prevItem();
+document.getElementById('playPauseBtn').onclick = togglePlayPause;
+document.getElementById('speedBtn').onclick = changeSpeed;
+document.getElementById('resetCounterBtn').onclick = resetCounter;
+
+function init() {
+    updateDisplay();
+    updateCounters();
+    timerSecondsSpan.textContent = speed;
+    timerProgressFill.style.width = '100%';
+    startTimer();
+}
+
+init();
+
+window.addEventListener('beforeunload', () => {
+    localStorage.setItem('azkar_total_counter', zikrCounter);
+});
+
+const savedCounter = localStorage.getItem('azkar_total_counter');
+if (savedCounter) {
+    zikrCounter = parseInt(savedCounter);
+    updateCounters();
+}
                 }).catch(e => {
                     alert('حدث خطأ: ' + e.message);
                 });
