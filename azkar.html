@@ -261,17 +261,18 @@
             </div>
         </div>
         
+        <!-- الصف الأول: السابق + زر تشغيل سورة الكهف + التالي -->
         <div class="controls">
             <button class="control-btn" id="prevBtn"><i class="fas fa-arrow-right"></i><span>السابق</span></button>
-            <button class="control-btn primary" id="playPauseBtn"><i class="fas fa-pause" id="playPauseIcon"></i><span id="playPauseText">إيقاف مؤقت</span></button>
+            <button class="control-btn primary" id="mp3Btn"><i id="mp3Icon" class="fas fa-play"></i><span id="mp3Text">تشغيل سورة الكهف</span></button>
             <button class="control-btn" id="nextBtn"><span>التالي</span><i class="fas fa-arrow-left"></i></button>
         </div>
         
-        <!-- صف الأزرار الثاني: السرعة + إعادة تعيين + زر الصوت -->
+        <!-- الصف الثاني: السرعة + إعادة تعيين + تشغيل تلقائي للأذكار -->
         <div class="controls">
             <button class="control-btn" id="speedBtn"><i class="fas fa-tachometer-alt"></i><span id="speedText">السرعة: 3 ثواني</span></button>
             <button class="control-btn" id="resetCounterBtn"><i class="fas fa-redo-alt"></i><span>إعادة تعيين العداد</span></button>
-            <button class="control-btn" id="mp3Btn"><i id="mp3Icon" class="fas fa-play"></i><span id="mp3Text">تشغيل سورة الكهف</span></button>
+            <button class="control-btn" id="playPauseBtn"><i class="fas fa-pause" id="playPauseIcon"></i><span id="playPauseText">إيقاف مؤقت</span></button>
         </div>
         
         <div class="back-link">
@@ -514,80 +515,45 @@
             updateCounters();
         }
         
-        updateCounters();
-
-// ==================== مشغل MP3 ====================
-const mp3Audio = document.getElementById('bgMp3');
-const mp3Btn = document.getElementById('mp3Btn');
-const mp3Icon = document.getElementById('mp3Icon');
-const mp3Text = document.getElementById('mp3Text');
-
-let isMp3Playing = false;
-
-function tryAutoPlayMp3() {
-    mp3Audio.play().then(() => {
-        isMp3Playing = true;
-        mp3Icon.className = 'fas fa-pause';
-        mp3Text.textContent = 'إيقاف';
-    }).catch(() => {
-        console.log('التشغيل التلقائي غير مسموح');
-        isMp3Playing = false;
-        mp3Icon.className = 'fas fa-play';
-        mp3Text.textContent = 'تشغيل سورة الكهف';
-    });
-}
-
-mp3Btn.onclick = (e) => {
-    e.stopPropagation();
-    if (isMp3Playing) {
-        mp3Audio.pause();
-        mp3Icon.className = 'fas fa-play';
-        mp3Text.textContent = 'تشغيل سورة الكهف';
-    } else {
-        mp3Audio.play().then(() => {
-            mp3Icon.className = 'fas fa-pause';
-            mp3Text.textContent = 'إيقاف';
-        }).catch(e => {
-            alert('حدث خطأ: ' + e.message);
-        });
-    }
-    isMp3Playing = !isMp3Playing;
-};
-
-tryAutoPlayMp3();
-
-// ربط الأزرار
-document.getElementById('nextBtn').onclick = () => nextItem();
-document.getElementById('prevBtn').onclick = () => prevItem();
-document.getElementById('playPauseBtn').onclick = togglePlayPause;
-document.getElementById('speedBtn').onclick = changeSpeed;
-document.getElementById('resetCounterBtn').onclick = resetCounter;
-
-function init() {
-    updateDisplay();
-    updateCounters();
-    timerSecondsSpan.textContent = speed;
-    timerProgressFill.style.width = '100%';
-    startTimer();
-}
-
-init();
-
-window.addEventListener('beforeunload', () => {
-    localStorage.setItem('azkar_total_counter', zikrCounter);
-});
-
-const savedCounter = localStorage.getItem('azkar_total_counter');
-if (savedCounter) {
-    zikrCounter = parseInt(savedCounter);
-    updateCounters();
-}
+        // ==================== مشغل MP3 ====================
+        const mp3Audio = document.getElementById('bgMp3');
+        const mp3Btn = document.getElementById('mp3Btn');
+        const mp3Icon = document.getElementById('mp3Icon');
+        const mp3Text = document.getElementById('mp3Text');
+        
+        let isMp3Playing = false;
+        
+        function tryAutoPlayMp3() {
+            mp3Audio.play().then(() => {
+                isMp3Playing = true;
+                mp3Icon.className = 'fas fa-pause';
+                mp3Text.textContent = 'إيقاف';
+            }).catch(() => {
+                console.log('التشغيل التلقائي غير مسموح');
+                isMp3Playing = false;
+                mp3Icon.className = 'fas fa-play';
+                mp3Text.textContent = 'تشغيل سورة الكهف';
+            });
+        }
+        
+        mp3Btn.onclick = (e) => {
+            e.stopPropagation();
+            if (isMp3Playing) {
+                mp3Audio.pause();
+                mp3Icon.className = 'fas fa-play';
+                mp3Text.textContent = 'تشغيل سورة الكهف';
+            } else {
+                mp3Audio.play().then(() => {
+                    mp3Icon.className = 'fas fa-pause';
+                    mp3Text.textContent = 'إيقاف';
                 }).catch(e => {
                     alert('حدث خطأ: ' + e.message);
                 });
             }
             isMp3Playing = !isMp3Playing;
         };
+        
+        tryAutoPlayMp3();
         
         // ربط الأزرار
         document.getElementById('nextBtn').onclick = () => nextItem();
@@ -602,7 +568,6 @@ if (savedCounter) {
             timerSecondsSpan.textContent = speed;
             timerProgressFill.style.width = '100%';
             startTimer();
-            tryAutoPlayMp3();
         }
         
         init();
